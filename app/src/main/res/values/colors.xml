@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#73C6DA</color>
+    <color name="colorSecondary">#3E7C9B</color>
+    <color name="colorPrimaryDark">#325D79</color>
+    <color name="colorAccent">#EFEEEE</color>
+    <color name="colorButton">#F9A26C</color>
+    <color name="colorButtonDark">#F26627</color>
+    <color name='colorButtonOK'>#BBFAC2</color>
+    <color name="colorButtonOKDark">#27F267</color>
+    <color name='colorButtonCancel'>#DF4480</color>
+    <color name='colorButtonCancelDark'>#E572A8</color>
+</resources>
