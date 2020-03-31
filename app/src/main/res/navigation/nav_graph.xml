@@ -8,10 +8,18 @@
         android:id="@+id/foodDiaryFragment2"
         android:name="com.example.healthyz.FoodDiaryFragment"
         android:label="Food Diary"
-        tools:layout="@layout/fragment_food_diary" />
+        tools:layout="@layout/fragment_food_diary" >
+        <action
+            android:id="@+id/action_foodDiaryFragment2_to_summaryFragment2"
+            app:destination="@id/summaryFragment2" />
+    </fragment>
     <fragment
         android:id="@+id/summaryFragment2"
         android:name="com.example.healthyz.SummaryFragment"
         android:label="Summary"
-        tools:layout="@layout/fragment_summary" />
+        tools:layout="@layout/fragment_summary" >
+        <action
+            android:id="@+id/action_summaryFragment2_to_foodDiaryFragment2"
+            app:destination="@id/foodDiaryFragment2" />
+    </fragment>
 </navigation>

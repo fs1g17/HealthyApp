@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">HealthyZ</string>
+    <string name="food_entry_hint">add food</string>
+    <string name="add_food_item_description">add food item</string>
+    <string name="meal_entry_box_name">meal</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
