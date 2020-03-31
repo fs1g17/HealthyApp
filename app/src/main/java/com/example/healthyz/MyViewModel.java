@@ -14,10 +14,24 @@ public class MyViewModel extends AndroidViewModel {
     private int mealCounter;
     private HashMap<Integer, ArrayList<String>> table;
 
+    private MealRepository mRepository;
+    private LiveData<List<Meal>> mAllMeals;
+
     public MyViewModel (Application application) {
         super(application);
         mealCounter = 0;
         table = new HashMap<>();
+
+        mRepository = new MealRepository(application);
+        mAllMeals = mRepository.getAllMeals();
+    }
+
+    LiveData<List<Meal>> getAllMeals(){
+        return mAllMeals;
+    }
+
+    public void insert(Meal meal){
+        mRepository.insert(meal);
     }
 
     public void createMeal(){
