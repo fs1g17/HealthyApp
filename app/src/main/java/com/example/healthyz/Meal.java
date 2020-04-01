@@ -18,9 +18,9 @@ public class Meal {
 
     @NonNull
     @ColumnInfo(name = "meal")
-    private ArrayList<String> meal;
+    private String meal;
 
-    public Meal(String date, int mealID, ArrayList<String> meal){
+    public Meal(String date, int mealID, String meal){
         this.date = date;
         this.mealID = mealID;
         this.meal = meal;
@@ -34,7 +34,7 @@ public class Meal {
         return mealID;
     }
 
-    public ArrayList<String> getMeal(){
+    public String getMeal(){
         return meal;
     }
 }

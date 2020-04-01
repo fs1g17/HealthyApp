@@ -24,9 +24,14 @@ public class FoodDiaryFragment extends Fragment implements View.OnClickListener 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         thisView = inflater.inflate(R.layout.fragment_food_diary, container, false);
+        return thisView;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         addEntry = thisView.findViewById(R.id.add_meal);
         addEntry.setOnClickListener(this);
-        return thisView;
     }
 
     @Override

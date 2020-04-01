@@ -2,6 +2,7 @@ package com.example.healthyz;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -54,11 +55,16 @@ public class MealFragment extends Fragment implements View.OnClickListener, View
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         thisView = inflater.inflate(R.layout.fragment_meal, container, false);
+        return thisView;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         actionButtonIsDelete = false;
         actionButton = thisView.findViewById(R.id.add_food_item);
         actionButton.setOnClickListener(this);
         actionButton.setOnLongClickListener(this);
-        return thisView;
     }
 
     @Override

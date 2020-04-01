@@ -54,6 +54,12 @@ public class FoodFragment extends Fragment implements View.OnClickListener, View
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         thisView = inflater.inflate(R.layout.fragment_food, container, false);
+        return thisView;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         actionButton = thisView.findViewById(R.id.user_input_food_ok);
         actionButtonIsOK = true;
         userInputFood = thisView.findViewById(R.id.user_input_food);
@@ -65,7 +71,6 @@ public class FoodFragment extends Fragment implements View.OnClickListener, View
 
         actionButton.setOnClickListener(this);
         actionButton.setOnLongClickListener(this);
-        return thisView;
     }
 
     @Override
