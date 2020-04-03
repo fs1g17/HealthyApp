@@ -24,27 +24,24 @@ public class MyViewModel extends AndroidViewModel {
 
         mRepository = new MealRepository(application);
         mAllMeals = mRepository.getAllMeals();
-        initialise();
     }
 
-    void initialise(){
-        List<Meal> mealList = mAllMeals.getValue();
-        if((mealList != null) && (!mealList.isEmpty())){
-            for(Meal meal : mealList){
-                int mealID = meal.getMealID();
-                String[] foodList = meal.getMeal().split("\t");
-                ArrayList<String> foods = new ArrayList<>();
+    public void save(){
+        mRepository.save(table);
+    }
 
-                for(int i=0; i<foodList.length; i++){
-                    foods.add(foodList[i]);
-                }
+    public void addMeal(int mealID, String[] foods){
+        ArrayList<String> foodList = new ArrayList<>();
 
-                table.put(mealID,foods);
-                if(mealID > mealCounter){
-                    mealCounter = mealID + 1;
-                }
-            }
+        for(String food : foods){
+            foodList.add(food);
         }
+
+        table.put(mealID,foodList);
+    }
+
+    public void setMealCounter(int newValue){
+        mealCounter = newValue;
     }
 
     LiveData<List<Meal>> getAllMeals(){

@@ -30,10 +30,10 @@ public class MealFragment extends Fragment implements View.OnClickListener, View
         return fragment;
     }
 
-    public static MealFragment restoreInstance(int mealNumber, ArrayList<String> foodList){
+    public static MealFragment restoreInstance(int mealNumber, String foodList){
         Bundle args = new Bundle();
         args.putInt("mealNumber",mealNumber);
-        args.putStringArrayList("foodList",foodList);
+        args.putString("foodList",foodList);
         MealFragment fragment = new MealFragment();
         fragment.setArguments(args);
         return fragment;
@@ -43,9 +43,19 @@ public class MealFragment extends Fragment implements View.OnClickListener, View
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mealNumber = this.getArguments().getInt("mealNumber");
+        String food;
 
         if(this.getArguments().containsKey("foodList")){
-            foodList = this.getArguments().getStringArrayList("foodList");
+            food = this.getArguments().getString("foodList");
+            String[] foodArray = food.split("\t");
+
+            for(int i=0; i<foodArray.length; i++){
+                getChildFragmentManager()
+                        .beginTransaction()
+                        .add(R.id.food_item_container,
+                                FoodFragment.restoreInstance(mealNumber,foodArray[i]))
+                        .commit();
+            }
         }
         else{
             foodList = null;
@@ -71,16 +81,6 @@ public class MealFragment extends Fragment implements View.OnClickListener, View
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         myViewModel = new ViewModelProvider(getActivity()).get(MyViewModel.class);
-        initialise();
-    }
-
-    private void initialise(){
-        if(foodList != null){
-            int foodItemID = mealNumber;
-            for(String s : foodList){
-                getChildFragmentManager().beginTransaction().add(R.id.food_item_container, FoodFragment.restoreInstance(foodItemID,s)).commit();
-            }
-        }
     }
 
     @Override

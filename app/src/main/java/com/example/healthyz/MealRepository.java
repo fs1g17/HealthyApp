@@ -4,7 +4,12 @@ import android.app.Application;
 
 import androidx.lifecycle.LiveData;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 class MealRepository {
     private MealDao mMealDao;
@@ -25,6 +30,36 @@ class MealRepository {
         MealRoomDatabase.databaseWriteExecutor.execute(() -> {
             mMealDao.insert(meal);
         });
+    }
+
+    //TODO: fix dates
+    void save(@NotNull HashMap<Integer, ArrayList<String>> table){
+        Set<Integer> keySet = table.keySet();
+        String today = "03042020";
+
+        if(!keySet.isEmpty()){
+            for(Integer mealID : keySet){
+                ArrayList<String> foodList = table.get(mealID);
+
+                if(foodList.isEmpty()){
+                    //DO NOTHING
+                }
+                else if(foodList.size() == 1){
+                    Meal meal = new Meal(today,mealID,foodList.get(0));
+                    insert(meal);
+                }
+                else{
+                    String foods = foodList.get(0);
+
+                    for(int i=1; i<foodList.size(); i++){
+                        foods = foods + "\t" + foodList.get(i);
+                    }
+
+                    Meal meal = new Meal(today,mealID,foods);
+                    insert(meal);
+                }
+            }
+        }
     }
 }
 

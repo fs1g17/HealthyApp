@@ -22,4 +22,6 @@
             android:id="@+id/action_summaryFragment2_to_foodDiaryFragment2"
             app:destination="@id/foodDiaryFragment2" />
     </fragment>
+
+
 </navigation>
