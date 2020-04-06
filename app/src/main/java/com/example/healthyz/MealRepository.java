@@ -32,8 +32,16 @@ class MealRepository {
         });
     }
 
+    void deleteAll(){
+        MealRoomDatabase.databaseWriteExecutor.execute(() -> {
+            mMealDao.deleteAll();
+        });
+    }
+
+    //By calling deleteAll() before saving again, we ensure that deletion works
     //TODO: fix dates
     void save(@NotNull HashMap<Integer, ArrayList<String>> table){
+        deleteAll();
         Set<Integer> keySet = table.keySet();
         String today = "03042020";
 

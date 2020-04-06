@@ -95,11 +95,19 @@ public class MealFragment extends Fragment implements View.OnClickListener, View
         }
     }
 
+    /*
     @Override
     public boolean onLongClick(View v) {
         if(myViewModel.getFoodList(mealNumber).isEmpty()){
             setActionButtonToDelete();
         }
+        return true;
+    }
+     */
+
+    @Override
+    public boolean onLongClick(View v) {
+        setActionButtonToDelete();
         return true;
     }
 
