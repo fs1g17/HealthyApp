@@ -5,7 +5,6 @@ import android.app.Application;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -18,28 +17,32 @@ public class MyViewModel extends AndroidViewModel {
     private HashMap<Integer, ArrayList<String>> table;
 
     private MealRepository mRepository;
-    private LiveData<List<Meal>> mAllMeals;
+    private LiveData<List<Meal>> mealsByDate;
 
     public MyViewModel (Application application) {
         super(application);
         mealCounter = 0;
         table = new HashMap<>();
 
-        mRepository = new MealRepository(application);
-        mAllMeals = mRepository.getAllMeals();
-
         Calendar c = Calendar.getInstance();
         currentDate = c.get(Calendar.DAY_OF_MONTH) + "" +
-                      c.get(Calendar.MONTH) + "" +
-                      c.get(Calendar.YEAR);
+                c.get(Calendar.MONTH) + "" +
+                c.get(Calendar.YEAR);
+
+        mRepository = new MealRepository(application);
+        mealsByDate = mRepository.getMealsByDate(currentDate);
     }
 
     public void setDate(String date){
         currentDate = date;
+        mealCounter = 0;
+        table = new HashMap<>();
+
+        mealsByDate = mRepository.getMealsByDate(currentDate);
     }
 
     public void save(){
-        mRepository.save(table);
+        mRepository.save(table, currentDate);
     }
 
     public void addMeal(int mealID, String[] foods){
@@ -57,7 +60,7 @@ public class MyViewModel extends AndroidViewModel {
     }
 
     LiveData<List<Meal>> getAllMeals(){
-        return mAllMeals;
+        return mealsByDate;
     }
 
     public void insert(Meal meal){

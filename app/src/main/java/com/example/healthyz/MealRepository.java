@@ -13,16 +13,14 @@ import java.util.Set;
 
 class MealRepository {
     private MealDao mMealDao;
-    private LiveData<List<Meal>> mAllMeals;
 
     MealRepository(Application application){
         MealRoomDatabase db = MealRoomDatabase.getDatabase(application);
         mMealDao = db.mealDao();
-        mAllMeals = mMealDao.getAllMeals();
     }
 
-    LiveData<List<Meal>> getAllMeals(){
-        return mAllMeals;
+    LiveData<List<Meal>> getMealsByDate(String date){
+        return mMealDao.getMealsByDate(date);
     }
 
     //Must call insert on a non-UI thread of the app
@@ -38,12 +36,17 @@ class MealRepository {
         });
     }
 
+    void deleteByDate(String date){
+        MealRoomDatabase.databaseWriteExecutor.execute(() -> {
+            mMealDao.deleteAllByDate(date);
+        });
+    }
+
     //By calling deleteAll() before saving again, we ensure that deletion works
     //TODO: fix dates
-    void save(@NotNull HashMap<Integer, ArrayList<String>> table){
-        deleteAll();
+    void save(@NotNull HashMap<Integer, ArrayList<String>> table, String date){
+        deleteByDate(date);
         Set<Integer> keySet = table.keySet();
-        String today = "03042020";
 
         if(!keySet.isEmpty()){
             for(Integer mealID : keySet){
@@ -53,7 +56,7 @@ class MealRepository {
                     //DO NOTHING
                 }
                 else if(foodList.size() == 1){
-                    Meal meal = new Meal(today,mealID,foodList.get(0));
+                    Meal meal = new Meal(date,mealID,foodList.get(0));
                     insert(meal);
                 }
                 else{
@@ -63,7 +66,7 @@ class MealRepository {
                         foods = foods + "\t" + foodList.get(i);
                     }
 
-                    Meal meal = new Meal(today,mealID,foods);
+                    Meal meal = new Meal(date,mealID,foods);
                     insert(meal);
                 }
             }

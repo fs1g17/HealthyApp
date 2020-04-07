@@ -152,9 +152,38 @@ public class FoodDiaryFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        for(Fragment fragment : getChildFragmentManager().getFragments()){
+            getChildFragmentManager().beginTransaction().remove(fragment).commit();
+        }
+
         String date = dayOfMonth + "" + month + "" + year;
         myViewModel.setDate(date);
         String prettyDate = dayOfMonth + "/" + month + "/" + year;
         datePicker.setText(prettyDate);
+
+        myViewModel.getAllMeals().observe(getActivity(), new Observer<List<Meal>>() {
+            @Override
+            public void onChanged(List<Meal> mealList) {
+                int highestMealID = 0;
+                for(Meal meal : mealList){
+                    int mealID = meal.getMealID();
+
+                    if(mealID > highestMealID){
+                        highestMealID = mealID;
+                    }
+
+                    String foodList = meal.getMeal();
+                    FoodDiaryFragment
+                            .this
+                            .getChildFragmentManager()
+                            .beginTransaction()
+                            .add(R.id.food_diary_container,
+                                    MealFragment.restoreInstance(mealID,foodList))
+                            .commit();
+                    myViewModel.addMeal(mealID,foodList.split("\t"));
+                }
+                myViewModel.setMealCounter(highestMealID + 1);
+            }
+        });
     }
 }
