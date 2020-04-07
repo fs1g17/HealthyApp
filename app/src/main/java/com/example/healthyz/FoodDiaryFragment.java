@@ -142,6 +142,7 @@ public class FoodDiaryFragment extends Fragment implements View.OnClickListener,
         Calendar c = Calendar.getInstance();
         DatePickerDialog datePickerDialog = new DatePickerDialog(
                 getContext(),
+                R.style.MyDatePickerDialogTheme,
                 this,
                 c.get(Calendar.YEAR),
                 c.get(Calendar.MONTH),
