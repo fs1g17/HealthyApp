@@ -1,5 +1,6 @@
 package com.example.healthyz;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,15 +13,19 @@ import androidx.lifecycle.ViewModelProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
 
-public class FoodDiaryFragment extends Fragment implements View.OnClickListener {
+public class FoodDiaryFragment extends Fragment implements View.OnClickListener, DatePickerDialog.OnDateSetListener {
     private View thisView;
+    private Button datePicker;
     private ImageButton save;
     private ImageButton addEntry;
     private MyViewModel myViewModel;
@@ -39,6 +44,9 @@ public class FoodDiaryFragment extends Fragment implements View.OnClickListener 
 
         addEntry = thisView.findViewById(R.id.add_meal);
         addEntry.setOnClickListener(this);
+
+        datePicker = thisView.findViewById(R.id.date_picker_button);
+        datePicker.setOnClickListener(this);
     }
 
     @Override
@@ -125,5 +133,27 @@ public class FoodDiaryFragment extends Fragment implements View.OnClickListener 
         if(v.getId() == R.id.save){
             myViewModel.save();
         }
+        if(v.getId() == R.id.date_picker_button){
+            showDatePickerDialog();
+        }
+    }
+
+    private void showDatePickerDialog(){
+        Calendar c = Calendar.getInstance();
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                getContext(),
+                this,
+                c.get(Calendar.YEAR),
+                c.get(Calendar.MONTH),
+                c.get(Calendar.DAY_OF_MONTH));
+        datePickerDialog.show();
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        String date = dayOfMonth + "" + month + "" + year;
+        myViewModel.setDate(date);
+        String prettyDate = dayOfMonth + "/" + month + "/" + year;
+        datePicker.setText(prettyDate);
     }
 }

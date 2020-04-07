@@ -5,12 +5,15 @@ import android.app.Application;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
 public class MyViewModel extends AndroidViewModel {
+    private String currentDate;
     private int mealCounter;
     private HashMap<Integer, ArrayList<String>> table;
 
@@ -24,6 +27,15 @@ public class MyViewModel extends AndroidViewModel {
 
         mRepository = new MealRepository(application);
         mAllMeals = mRepository.getAllMeals();
+
+        Calendar c = Calendar.getInstance();
+        currentDate = c.get(Calendar.DAY_OF_MONTH) + "" +
+                      c.get(Calendar.MONTH) + "" +
+                      c.get(Calendar.YEAR);
+    }
+
+    public void setDate(String date){
+        currentDate = date;
     }
 
     public void save(){

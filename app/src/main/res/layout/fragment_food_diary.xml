@@ -12,12 +12,25 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <Button
+            android:id="@+id/date_picker_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/date_picker_button_states"
+            android:layout_margin="15dp"
+            android:text="@string/pick_date"
+            android:textStyle="bold"
+            android:textColor="@color/colorAccent"
+            android:textSize="20dp"
+            app:layout_constraintTop_toTopOf = "parent"/>
+
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/food_diary_container"
             android:orientation="vertical"
-            app:layout_constraintTop_toTopOf = "parent">
+            app:layout_constraintTop_toBottomOf="@id/date_picker_button">
         </LinearLayout>
 
         <LinearLayout
