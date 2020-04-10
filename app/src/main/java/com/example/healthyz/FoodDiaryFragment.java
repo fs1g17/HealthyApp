@@ -53,17 +53,19 @@ public class FoodDiaryFragment extends Fragment implements View.OnClickListener,
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         myViewModel = new ViewModelProvider(getActivity()).get(MyViewModel.class);
+        String date = myViewModel.getPrettyDate();
+
+        datePicker.setText(date);
         initialise();
     }
 
-
-    public void initialise(){
-        //we load the data into the ViewModel only once when the application loads as it is costly
-        if(myViewModel.getTableSize() == 0){
-            myViewModel.getAllMeals().observe(requireActivity(), mAllMeals -> {
+    public Observer<List<Meal>> getObserver(){
+        return new Observer<List<Meal>>() {
+            @Override
+            public void onChanged(List<Meal> mealList) {
                 if(myViewModel.getTableSize() == 0){
                     int highestMealID = 0;
-                    for(Meal meal : mAllMeals){
+                    for(Meal meal : mealList){
                         int mealID = meal.getMealID();
 
                         if(mealID > highestMealID){
@@ -82,7 +84,15 @@ public class FoodDiaryFragment extends Fragment implements View.OnClickListener,
                     }
                     myViewModel.setMealCounter(highestMealID + 1);
                 }
-            });
+            }
+        };
+    }
+
+
+    public void initialise(){
+        //we load the data into the ViewModel only once when the application loads as it is costly
+        if(myViewModel.getTableSize() == 0){
+            myViewModel.getAllMeals().observe(getViewLifecycleOwner(), getObserver());
         }
         else{
             Set<Integer> keySet = myViewModel.getTableKeySet();
@@ -155,35 +165,9 @@ public class FoodDiaryFragment extends Fragment implements View.OnClickListener,
         for(Fragment fragment : getChildFragmentManager().getFragments()){
             getChildFragmentManager().beginTransaction().remove(fragment).commit();
         }
-
-        String date = dayOfMonth + "" + month + "" + year;
-        myViewModel.setDate(date);
+        myViewModel.setDate(dayOfMonth,month,year);
+        month++;
         String prettyDate = dayOfMonth + "/" + month + "/" + year;
         datePicker.setText(prettyDate);
-
-        myViewModel.getAllMeals().observe(getActivity(), new Observer<List<Meal>>() {
-            @Override
-            public void onChanged(List<Meal> mealList) {
-                int highestMealID = 0;
-                for(Meal meal : mealList){
-                    int mealID = meal.getMealID();
-
-                    if(mealID > highestMealID){
-                        highestMealID = mealID;
-                    }
-
-                    String foodList = meal.getMeal();
-                    FoodDiaryFragment
-                            .this
-                            .getChildFragmentManager()
-                            .beginTransaction()
-                            .add(R.id.food_diary_container,
-                                    MealFragment.restoreInstance(mealID,foodList))
-                            .commit();
-                    myViewModel.addMeal(mealID,foodList.split("\t"));
-                }
-                myViewModel.setMealCounter(highestMealID + 1);
-            }
-        });
     }
 }

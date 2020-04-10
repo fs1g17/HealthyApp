@@ -13,6 +13,9 @@ import java.util.Set;
 
 public class MyViewModel extends AndroidViewModel {
     private String currentDate;
+    private int day;
+    private int month;
+    private int year;
     private int mealCounter;
     private HashMap<Integer, ArrayList<String>> table;
 
@@ -25,20 +28,61 @@ public class MyViewModel extends AndroidViewModel {
         table = new HashMap<>();
 
         Calendar c = Calendar.getInstance();
-        currentDate = c.get(Calendar.DAY_OF_MONTH) + "" +
-                c.get(Calendar.MONTH) + "" +
-                c.get(Calendar.YEAR);
+        day = c.get(Calendar.DAY_OF_MONTH);
+        month = c.get(Calendar.MONTH);
+        year = c.get(Calendar.YEAR);
+
+        if(day < 10){
+            if(month < 10){
+                currentDate = "0" + day + "0" + month + year;
+            }
+            else{
+                currentDate = "0" + day + month + year;
+            }
+        } else{
+            if(month < 10){
+                currentDate = day + "0" + month + year;
+            }
+            else{
+                currentDate = day + month + year + "";
+            }
+        }
 
         mRepository = new MealRepository(application);
         mealsByDate = mRepository.getMealsByDate(currentDate);
     }
 
-    public void setDate(String date){
+    public void setDate(int day, int month, int year){
+        this.day = day;
+        this.month = month;
+        this.year = year;
+
+        String date;
+        if(day < 10){
+            if(month < 10){
+                date = "0" + day + "0" + month + year;
+            }
+            else{
+                date = "0" + day + month + year;
+            }
+        } else{
+            if(month < 10){
+                date = day + "0" + month + year;
+            }
+            else{
+                date = day + month + year + "";
+            }
+        }
+
         currentDate = date;
         mealCounter = 0;
         table = new HashMap<>();
 
         mealsByDate = mRepository.getMealsByDate(currentDate);
+    }
+
+    public String getPrettyDate(){
+        return day + "/" + (month+1) + "/" + year;
     }
 
     public void save(){
