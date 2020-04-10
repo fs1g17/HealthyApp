@@ -166,6 +166,7 @@ public class FoodDiaryFragment extends Fragment implements View.OnClickListener,
             getChildFragmentManager().beginTransaction().remove(fragment).commit();
         }
         myViewModel.setDate(dayOfMonth,month,year);
+        myViewModel.getAllMeals().observe(getViewLifecycleOwner(), getObserver());
         month++;
         String prettyDate = dayOfMonth + "/" + month + "/" + year;
         datePicker.setText(prettyDate);
