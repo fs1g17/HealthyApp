@@ -52,7 +52,8 @@ public class MyViewModel extends AndroidViewModel {
         mealsByDate = mRepository.getMealsByDate(currentDate);
     }
 
-    public void setDate(int day, int month, int year){
+    //added synchronized keyword
+    public synchronized void setDate(int day, int month, int year){
         this.day = day;
         this.month = month;
         this.year = year;
@@ -99,7 +100,8 @@ public class MyViewModel extends AndroidViewModel {
         mRepository.save(table,currentDate);
     }
 
-    public void addMeal(int mealID, String[] foods){
+    //added synchronized keyword
+    public synchronized void addMeal(int mealID, String[] foods){
         ArrayList<String> foodList = new ArrayList<>();
 
         for(String food : foods){
@@ -121,7 +123,8 @@ public class MyViewModel extends AndroidViewModel {
         mRepository.insert(meal);
     }
 
-    public void createMeal(){
+    //added synchronized keyword
+    public synchronized void createMeal(){
         ArrayList<String> foodList = new ArrayList<>();
         table.put(mealCounter,foodList);
     }
@@ -134,15 +137,18 @@ public class MyViewModel extends AndroidViewModel {
         return mealCounter;
     }
 
-    public int getTableSize(){
+    //added synchronized keyword
+    public synchronized int getTableSize(){
         return table.size();
     }
 
-    public Set<Integer> getTableKeySet(){
+    //added synchronized keyword
+    public synchronized Set<Integer> getTableKeySet(){
         return table.keySet();
     }
 
-    public boolean isLastMealEmpty(){
+    //added synchronized keyword
+    public synchronized boolean isLastMealEmpty(){
         if(getTableSize() == 0){
             return false;
         }
@@ -154,20 +160,24 @@ public class MyViewModel extends AndroidViewModel {
         return empty;
     }
 
-    public ArrayList<String> getFoodList(int meal){
+    //added synchronized keyword
+    public synchronized ArrayList<String> getFoodList(int meal){
         return table.get(meal);
     }
 
-    public void addFood(int meal, String food){
+    //added synchronized keyword
+    public synchronized void addFood(int meal, String food){
         table.get(meal).add(food);
     }
 
-    public void removeFood(int meal, String food){
+    //added synchronized keyword
+    public synchronized void removeFood(int meal, String food){
         table.get(meal).remove(food);
         //DELETE EntryFragment if this is empty
     }
 
-    public void removeMeal(int meal){
+    //added synchronized keyword
+    public synchronized void removeMeal(int meal){
         table.remove(meal);
     }
 }
