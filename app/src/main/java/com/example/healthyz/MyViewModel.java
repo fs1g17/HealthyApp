@@ -81,12 +81,22 @@ public class MyViewModel extends AndroidViewModel {
         mealsByDate = mRepository.getMealsByDate(currentDate);
     }
 
+    public int[] getDayMonthYear(){
+        return new int[] {day,month,year};
+    }
+
     public String getPrettyDate(){
         return day + "/" + (month+1) + "/" + year;
     }
 
+    /*
     public void save(){
         mRepository.save(table, currentDate);
+    }
+     */
+
+    public void save(){
+        mRepository.save(table,currentDate);
     }
 
     public void addMeal(int mealID, String[] foods){

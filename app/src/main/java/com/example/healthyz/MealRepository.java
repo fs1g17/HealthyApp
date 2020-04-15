@@ -78,3 +78,59 @@ class MealRepository {
 // on the main thread when the data has changed. We need to not run the insert on the main thread,
 // so we use the ExecutorService we created in the WordRoomDatabase to perform the insert on a
 // background thread.
+
+/*
+*
+List<Meal> loadedMeals = mealsByDate.getValue();
+
+        for(Meal oldMeal : loadedMeals){
+            int mealID = oldMeal.getMealID();
+
+            if(getTableKeySet().contains(mealID)){
+                //CHECK DIFFERENCES
+                String[] oldFoodItems = oldMeal.getMeal().split("\t");
+                ArrayList<String> newFoodItems = table.get(mealID);
+
+                //IF THEY'RE NOT THE SAME SIZE, UPDATE
+                if(oldFoodItems.length != newFoodItems.size()){
+                    mRepository.update(currentDate,mealID,newFoodItems);
+                }
+                else {
+                    boolean update = false;
+
+                    for(String oldFoodItem : oldFoodItems){
+                        if(!newFoodItems.contains(oldFoodItem)){
+                            update = true;
+                            break;
+                        }
+                    }
+
+                    for(String newFoodItem : newFoodItems){
+                        boolean contained = false;
+
+                        for(String oldFoodItem : oldFoodItems){
+                            if(newFoodItem.equals(oldFoodItem)){
+                                contained = true;
+                            }
+                        }
+
+                        if(contained){
+                            update = true;
+                            break;
+                        }
+                    }
+
+                    if(update){
+                        mRepository.update(currentDate,mealID,newFoodItems);
+                    }
+                }
+                //ACHIEVABLE BY INTERSECTION AND UNION;
+
+                //IF THERE ARE DIFFERENCES, UPDATE
+                //IF THERE AREN'T ANY DIFFERENCES, DO NOT UPDATE
+            }
+            else {
+                mRepository.deleteByDateAndMealID(currentDate,mealID);
+            }
+        }
+*/

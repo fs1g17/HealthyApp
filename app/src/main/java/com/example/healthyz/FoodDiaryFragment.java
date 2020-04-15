@@ -149,14 +149,14 @@ public class FoodDiaryFragment extends Fragment implements View.OnClickListener,
     }
 
     private void showDatePickerDialog(){
-        Calendar c = Calendar.getInstance();
+        int[] dayMonthYear = myViewModel.getDayMonthYear();
         DatePickerDialog datePickerDialog = new DatePickerDialog(
                 getContext(),
                 R.style.MyDatePickerDialogTheme,
                 this,
-                c.get(Calendar.YEAR),
-                c.get(Calendar.MONTH),
-                c.get(Calendar.DAY_OF_MONTH));
+                dayMonthYear[2],
+                dayMonthYear[1],
+                dayMonthYear[0]);
         datePickerDialog.show();
     }
 
