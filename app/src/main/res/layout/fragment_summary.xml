@@ -25,14 +25,25 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorSecondary"
-            android:columnCount="3"
+            android:columnCount="4"
             android:layout_marginTop="35dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/radar_graph">
 
             <TextView
-                android:layout_width="125dp"
+                android:layout_width="30dp"
+                android:layout_height="35dp"
+                android:layout_gravity="fill_horizontal"
+                android:layout_margin="0dp"
+                android:padding="5dp"
+                android:text="#"
+                android:textColor="@color/colorAccent"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="120dp"
                 android:layout_height="35dp"
                 android:layout_gravity="fill_horizontal"
                 android:layout_margin="0dp"
@@ -47,22 +58,34 @@
                 android:layout_height="35dp"
                 android:layout_gravity="fill_horizontal"
                 android:layout_margin="0dp"
+                android:padding="5dp"
                 android:text="HEI Component"
                 android:textColor="@color/colorAccent"
                 android:textSize="18dp"
-                android:textStyle="bold"
-                />
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="50dp"
-                android:layout_height="25dp"
+                android:layout_height="35dp"
                 android:layout_gravity="fill_horizontal"
                 android:layout_margin="0dp"
+                android:padding="5dp"
                 android:text="Score"
                 android:textColor="@color/colorAccent"
                 android:textSize="18dp"
                 android:textStyle="bold"
                 android:gravity="center_horizontal"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="fill_horizontal"
+                android:layout_margin="0dp"
+                android:padding="5dp"
+                android:text="1"
+                android:textColor="@color/colorAccent"
+                android:textSize="15dp"
+                android:gravity="center_horizontal" />
 
             <TextView
                 android:layout_width="0dp"
@@ -81,7 +104,7 @@
                 android:layout_gravity="fill_horizontal"
                 android:layout_margin="0dp"
                 android:padding="5dp"
-                android:text="1 Total Fruit"
+                android:text="Total Fruit"
                 android:textColor="@color/colorAccent"
                 android:textSize="15dp" />
 
@@ -102,8 +125,19 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="fill_horizontal"
                 android:layout_margin="0dp"
+                android:text="2"
                 android:padding="5dp"
-                android:text="2 Whole Fruit"
+                android:textColor="@color/colorAccent"
+                android:textSize="15dp"
+                android:gravity="center_horizontal"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="fill_horizontal"
+                android:layout_margin="0dp"
+                android:padding="5dp"
+                android:text="Whole Fruit"
                 android:textColor="@color/colorAccent"
                 android:textSize="15dp" />
 
@@ -124,8 +158,19 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="fill_horizontal"
                 android:layout_margin="0dp"
+                android:text="3"
                 android:padding="5dp"
-                android:text="3 Total Vegetables"
+                android:textColor="@color/colorAccent"
+                android:textSize="15dp"
+                android:gravity="center_horizontal"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="fill_horizontal"
+                android:layout_margin="0dp"
+                android:padding="5dp"
+                android:text="Total Vegetables"
                 android:textColor="@color/colorAccent"
                 android:textSize="15dp" />
 
@@ -146,8 +191,18 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="fill_horizontal"
                 android:layout_margin="0dp"
+                android:text="4"
                 android:padding="5dp"
-                android:text="4 Greens and Beans"
+                android:textColor="@color/colorAccent"
+                android:textSize="15dp"
+                android:gravity="center_horizontal"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="fill_horizontal"
+                android:layout_margin="0dp"
+                android:padding="5dp"
+                android:text="Greens and Beans"
                 android:textColor="@color/colorAccent"
                 android:textSize="15dp" />
 
@@ -158,6 +213,17 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="fill_horizontal"
                 android:layout_margin="0dp"
+                android:padding="5dp"
+                android:textColor="@color/colorAccent"
+                android:textSize="15dp"
+                android:gravity="center_horizontal"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="fill_horizontal"
+                android:layout_margin="0dp"
+                android:text="5"
                 android:padding="5dp"
                 android:textColor="@color/colorAccent"
                 android:textSize="15dp"
@@ -180,7 +246,7 @@
                 android:layout_gravity="fill_horizontal"
                 android:layout_margin="0dp"
                 android:padding="5dp"
-                android:text="5 Whole Grains"
+                android:text="Whole Grains"
                 android:textColor="@color/colorAccent"
                 android:textSize="15dp" />
 
@@ -201,8 +267,19 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="fill_horizontal"
                 android:layout_margin="0dp"
+                android:text="6"
                 android:padding="5dp"
-                android:text="6 Refined Grains"
+                android:textColor="@color/colorAccent"
+                android:textSize="15dp"
+                android:gravity="center_horizontal"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="fill_horizontal"
+                android:layout_margin="0dp"
+                android:padding="5dp"
+                android:text="Refined Grains"
                 android:textColor="@color/colorAccent"
                 android:textSize="15dp" />
 
@@ -213,6 +290,17 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="fill_horizontal"
                 android:layout_margin="0dp"
+                android:padding="5dp"
+                android:textColor="@color/colorAccent"
+                android:textSize="15dp"
+                android:gravity="center_horizontal"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="fill_horizontal"
+                android:layout_margin="0dp"
+                android:text="7"
                 android:padding="5dp"
                 android:textColor="@color/colorAccent"
                 android:textSize="15dp"
@@ -235,7 +323,7 @@
                 android:layout_gravity="fill_horizontal"
                 android:layout_margin="0dp"
                 android:padding="5dp"
-                android:text="7 Total Protein Foods"
+                android:text="Total Protein Foods"
                 android:textColor="@color/colorAccent"
                 android:textSize="15dp" />
 
@@ -256,8 +344,19 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="fill_horizontal"
                 android:layout_margin="0dp"
+                android:text="8"
                 android:padding="5dp"
-                android:text="8 Seafood and Plant Proteins"
+                android:textColor="@color/colorAccent"
+                android:textSize="15dp"
+                android:gravity="center_horizontal"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="fill_horizontal"
+                android:layout_margin="0dp"
+                android:padding="5dp"
+                android:text="Seafood and Plant Proteins"
                 android:textColor="@color/colorAccent"
                 android:textSize="15dp" />
 
@@ -268,6 +367,17 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="fill_horizontal"
                 android:layout_margin="0dp"
+                android:padding="5dp"
+                android:textColor="@color/colorAccent"
+                android:textSize="15dp"
+                android:gravity="center_horizontal"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="fill_horizontal"
+                android:layout_margin="0dp"
+                android:text="9"
                 android:padding="5dp"
                 android:textColor="@color/colorAccent"
                 android:textSize="15dp"
@@ -289,7 +399,7 @@
                 android:layout_gravity="fill_horizontal"
                 android:layout_margin="0dp"
                 android:padding="5dp"
-                android:text="9 Total Dairy"
+                android:text="Total Dairy"
                 android:textColor="@color/colorAccent"
                 android:textSize="15dp" />
 
@@ -300,6 +410,17 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="fill_horizontal"
                 android:layout_margin="0dp"
+                android:padding="5dp"
+                android:textColor="@color/colorAccent"
+                android:textSize="15dp"
+                android:gravity="center_horizontal"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="fill_horizontal"
+                android:layout_margin="0dp"
+                android:text="10"
                 android:padding="5dp"
                 android:textColor="@color/colorAccent"
                 android:textSize="15dp"
@@ -322,7 +443,7 @@
                 android:layout_gravity="fill_horizontal"
                 android:layout_margin="0dp"
                 android:padding="5dp"
-                android:text="10 Fatty Acid Ratio"
+                android:text="Fatty Acid Ratio"
                 android:textColor="@color/colorAccent"
                 android:textSize="15dp" />
 
@@ -343,8 +464,19 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="fill_horizontal"
                 android:layout_margin="0dp"
+                android:text="11"
                 android:padding="5dp"
-                android:text="11 Saturated Fats"
+                android:textColor="@color/colorAccent"
+                android:textSize="15dp"
+                android:gravity="center_horizontal"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="fill_horizontal"
+                android:layout_margin="0dp"
+                android:padding="5dp"
+                android:text="Saturated Fats"
                 android:textColor="@color/colorAccent"
                 android:textSize="15dp" />
 
@@ -355,6 +487,17 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="fill_horizontal"
                 android:layout_margin="0dp"
+                android:padding="5dp"
+                android:textColor="@color/colorAccent"
+                android:textSize="15dp"
+                android:gravity="center_horizontal"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="fill_horizontal"
+                android:layout_margin="0dp"
+                android:text="12"
                 android:padding="5dp"
                 android:textColor="@color/colorAccent"
                 android:textSize="15dp"
@@ -377,7 +520,7 @@
                 android:layout_gravity="fill_horizontal"
                 android:layout_margin="0dp"
                 android:padding="5dp"
-                android:text="12 Sodium"
+                android:text="Sodium"
                 android:textColor="@color/colorAccent"
                 android:textSize="15dp" />
 
@@ -398,8 +541,19 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="fill_horizontal"
                 android:layout_margin="0dp"
+                android:gravity="center_horizontal"
+                android:text="13"
                 android:padding="5dp"
-                android:text="13 Added Sugars"
+                android:textColor="@color/colorAccent"
+                android:textSize="15dp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="fill_horizontal"
+                android:layout_margin="0dp"
+                android:padding="5dp"
+                android:text="Added Sugars"
                 android:textColor="@color/colorAccent"
                 android:textSize="15dp" />
 
