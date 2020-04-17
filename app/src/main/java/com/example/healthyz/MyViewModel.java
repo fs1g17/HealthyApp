@@ -18,6 +18,7 @@ public class MyViewModel extends AndroidViewModel {
     private int year;
     private int mealCounter;
     private HashMap<Integer, ArrayList<String>> table;
+    private float[] HEIScore;
 
     private MealRepository mRepository;
     private LiveData<List<Meal>> mealsByDate;
@@ -50,6 +51,13 @@ public class MyViewModel extends AndroidViewModel {
 
         mRepository = new MealRepository(application);
         mealsByDate = mRepository.getMealsByDate(currentDate);
+
+        //FOR NOW ITS HARD CODED
+        HEIScore = new float[]{50,60,70,30,25,44,68,23,46,19,20,69,80};
+    }
+
+    public float[] getHEIScore(){
+        return HEIScore;
     }
 
     //added synchronized keyword
