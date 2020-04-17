@@ -33,7 +33,6 @@ public class SummaryFragment extends Fragment {
     private View thisView;
     private float[] HEIScore;
     private RadarChart HEIChart;
-    private TableLayout HEINumbers;
     private MyViewModel myViewModel;
 
     // TODO: Rename and change types and number of parameters
@@ -54,7 +53,6 @@ public class SummaryFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         HEIChart = thisView.findViewById(R.id.radar_graph);
-        HEINumbers = thisView.findViewById(R.id.numerical_hei_table);
 
         HEIChart.getDescription().setEnabled(false);
         HEIChart.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
@@ -94,19 +92,19 @@ public class SummaryFragment extends Fragment {
         TextView addedSugars = thisView.findViewById(R.id.added_sugars);
         TextView satFatAcids = thisView.findViewById(R.id.saturated_fats);
 
-        totalFruits.setText("1  Total Fruits: " + HEIScore[0]);
-        wholeFruits.setText("2  Whole Fruits: " + HEIScore[1]);
-        totalVegies.setText("3  Total Vegetables: " + HEIScore[2]);
-        greensBeans.setText("4  Greens and Beans: " + HEIScore[3]);
-        wholeGrains.setText("5  Whole Grains: " + HEIScore[4]);
-        totalDairys.setText("6  Total Dairy: " + HEIScore[5]);
-        allProtFood.setText("7  Total Protein Foods: " + HEIScore[6]);
-        seaAndPlant.setText("8  Seafood and Plant Proteins: " + HEIScore[7]);
-        fattyAcidsR.setText("9  Fatty Acids Ratio: " + HEIScore[8]);
-        refineGrain.setText("10 Refined Grains: " + HEIScore[9]);
-        sodiumValue.setText("11 Sodium: " + HEIScore[10]);
-        addedSugars.setText("12 Added Sugars: " + HEIScore[11]);
-        satFatAcids.setText("13 Saturated Fats: "+ HEIScore[12]);
+        totalFruits.setText("" + HEIScore[0]);
+        wholeFruits.setText("" + HEIScore[1]);
+        totalVegies.setText("" + HEIScore[2]);
+        greensBeans.setText("" + HEIScore[3]);
+        wholeGrains.setText("" + HEIScore[4]);
+        totalDairys.setText("" + HEIScore[5]);
+        allProtFood.setText("" + HEIScore[6]);
+        seaAndPlant.setText("" + HEIScore[7]);
+        fattyAcidsR.setText("" + HEIScore[8]);
+        refineGrain.setText("" + HEIScore[9]);
+        sodiumValue.setText("" + HEIScore[10]);
+        addedSugars.setText("" + HEIScore[11]);
+        satFatAcids.setText("" + HEIScore[12]);
 
         MarkerView mv = new RadarMarkerView(getContext(), R.layout.marker_view_layout);
         mv.setChartView(HEIChart);
