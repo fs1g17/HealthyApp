@@ -13,6 +13,8 @@ import androidx.lifecycle.ViewModelProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
@@ -29,9 +31,11 @@ import com.github.mikephil.charting.interfaces.datasets.IRadarDataSet;
 
 import java.util.ArrayList;
 
-public class SummaryFragment extends Fragment {
+public class SummaryFragment extends Fragment implements View.OnClickListener {
     private View thisView;
     private float[] HEIScore;
+    private Button tableToggle;
+    private boolean tableHidden;
     private RadarChart HEIChart;
     private MyViewModel myViewModel;
 
@@ -46,14 +50,17 @@ public class SummaryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         thisView = inflater.inflate(R.layout.fragment_summary, container, false);
+        tableToggle = thisView.findViewById(R.id.toggle_table_button);
+        tableToggle.setText("View Scores");
+        tableHidden = true;
         return thisView;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        tableToggle.setOnClickListener(this);
         HEIChart = thisView.findViewById(R.id.radar_graph);
-
         HEIChart.getDescription().setEnabled(false);
         HEIChart.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
         HEIChart.setWebLineWidth(1f);
@@ -72,40 +79,6 @@ public class SummaryFragment extends Fragment {
     }
 
     private void initialise(){
-
-        String[] HEIComponents = new String[]{"Total Fruits","Whole Fruits",
-        "Total Vegetables","Greens and Beans","Whole Grains","Dairy",
-        "Total Protein Foods","Seafood and Plant Proteins","Fatty Acids",
-        "Refined Grains","Sodium","Added Sugars","Saturated Fats"};
-
-        TextView totalFruits = thisView.findViewById(R.id.total_fruits);
-        TextView wholeFruits = thisView.findViewById(R.id.whole_fruits);
-        TextView totalVegies = thisView.findViewById(R.id.total_vegetables);
-        TextView greensBeans = thisView.findViewById(R.id.greens_beans);
-        TextView wholeGrains = thisView.findViewById(R.id.whole_grains);
-        TextView totalDairys = thisView.findViewById(R.id.dairy);
-        TextView allProtFood = thisView.findViewById(R.id.total_protein_foods);
-        TextView seaAndPlant = thisView.findViewById(R.id.seafood_plant_proteins);
-        TextView fattyAcidsR = thisView.findViewById(R.id.fatty_acid_ratio);
-        TextView refineGrain = thisView.findViewById(R.id.refined_grains);
-        TextView sodiumValue = thisView.findViewById(R.id.sodium);
-        TextView addedSugars = thisView.findViewById(R.id.added_sugars);
-        TextView satFatAcids = thisView.findViewById(R.id.saturated_fats);
-
-        totalFruits.setText("" + HEIScore[0]);
-        wholeFruits.setText("" + HEIScore[1]);
-        totalVegies.setText("" + HEIScore[2]);
-        greensBeans.setText("" + HEIScore[3]);
-        wholeGrains.setText("" + HEIScore[4]);
-        totalDairys.setText("" + HEIScore[5]);
-        allProtFood.setText("" + HEIScore[6]);
-        seaAndPlant.setText("" + HEIScore[7]);
-        fattyAcidsR.setText("" + HEIScore[8]);
-        refineGrain.setText("" + HEIScore[9]);
-        sodiumValue.setText("" + HEIScore[10]);
-        addedSugars.setText("" + HEIScore[11]);
-        satFatAcids.setText("" + HEIScore[12]);
-
         MarkerView mv = new RadarMarkerView(getContext(), R.layout.marker_view_layout);
         mv.setChartView(HEIChart);
         HEIChart.setMarker(mv);
@@ -172,6 +145,24 @@ public class SummaryFragment extends Fragment {
 
         HEIChart.setData(data);
         HEIChart.invalidate();
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(tableHidden){
+            getChildFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.table_container,HEITable.newInstance(HEIScore))
+                    .commit();
+            tableHidden = false;
+            tableToggle.setText("Hide Scores");
+        } else {
+            for(Fragment fragment : getChildFragmentManager().getFragments()){
+                getChildFragmentManager().beginTransaction().remove(fragment).commit();
+            }
+            tableHidden = true;
+            tableToggle.setText("View Scores");
+        }
     }
 
 
