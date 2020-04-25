@@ -30,6 +30,11 @@ import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IRadarDataSet;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class SummaryFragment extends Fragment implements View.OnClickListener {
     private View thisView;
@@ -74,6 +79,15 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         myViewModel = new ViewModelProvider(getActivity()).get(MyViewModel.class);
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://healthy-z.com:8500/HEIScore")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        MyAPI myAPI = retrofit.create(MyAPI.class);
+        Call<List<HEIScore>> call = myAPI.loadScores();
+
         HEIScore = myViewModel.getHEIScore();
         initialise();
     }
