@@ -33,10 +33,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class SummaryFragment extends Fragment implements View.OnClickListener {
+    private TextView TMP;
     private View thisView;
     private float[] HEIScore;
     private Button tableToggle;
@@ -58,6 +61,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
         tableToggle = thisView.findViewById(R.id.toggle_table_button);
         tableToggle.setText("View Scores");
         tableHidden = true;
+        TMP = thisView.findViewById(R.id.TMP);
         return thisView;
     }
 
@@ -81,15 +85,50 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
         myViewModel = new ViewModelProvider(getActivity()).get(MyViewModel.class);
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://healthy-z.com:8500/HEIScore")
+                .baseUrl("http://192.168.0.36:8069/HealthyZBackend_war/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-
         MyAPI myAPI = retrofit.create(MyAPI.class);
-        Call<List<HEIScore>> call = myAPI.loadScores();
+        Call<HEIScore> call = myAPI.getTESTScore();
+        call.enqueue(getCallback());
 
         HEIScore = myViewModel.getHEIScore();
         initialise();
+    }
+
+    private Callback<HEIScore> getCallback(){
+        return new Callback<com.example.healthyz.HEIScore>() {
+            @Override
+            public void onResponse(Call<com.example.healthyz.HEIScore> call, Response<com.example.healthyz.HEIScore> response) {
+                if(!response.isSuccessful()){
+                    TMP.setText("code: " + response.code());
+                    return;
+                }
+
+                com.example.healthyz.HEIScore loadedHEIScore = response.body();
+                String content = "";
+                content += "fatty_acids " + loadedHEIScore.getFatty_acids() + "\n";
+                content += "total_fruits " + loadedHEIScore.getTotal_fruits() + "\n";
+                content += "whole_fruits " + loadedHEIScore.getWhole_fruits() + "\n";
+                content += "total_vegies " + loadedHEIScore.getTotal_vegies() + "\n";
+                content += "greens_beans " + loadedHEIScore.getGreens_beans() + "\n";
+                content += "whole_grains " + loadedHEIScore.getWhole_grains() + "\n";
+                content += "dairy_things " + loadedHEIScore.getDairy_things() + "\n";
+                content += "protein_food " + loadedHEIScore.getProtein_food() + "\n";
+                content += "seas_plan_pr " + loadedHEIScore.getSeas_plan_pr() + "\n";
+                content += "added_sugars " + loadedHEIScore.getAdded_sugars() + "\n";
+                content += "refined_grain " + loadedHEIScore.getRefined_grain() + "\n";
+                content += "actual_sodium " + loadedHEIScore.getActual_sodium() + "\n";
+                content += "saturated_fats " + loadedHEIScore.getSaturated_fats() + "\n";
+                content += "estimated_sodium " + loadedHEIScore.getEstimated_sodium() + "\n";
+                TMP.setText(content);
+            }
+
+            @Override
+            public void onFailure(Call<com.example.healthyz.HEIScore> call, Throwable t) {
+                TMP.setText(t.getMessage());
+            }
+        };
     }
 
     private void initialise(){
