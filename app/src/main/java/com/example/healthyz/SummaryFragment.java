@@ -8,6 +8,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
@@ -83,52 +84,29 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         myViewModel = new ViewModelProvider(getActivity()).get(MyViewModel.class);
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.0.36:8069/HealthyZBackend_war/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        MyAPI myAPI = retrofit.create(MyAPI.class);
-        Call<HEIScore> call = myAPI.getTESTScore();
-        call.enqueue(getCallback());
-
-        HEIScore = myViewModel.getHEIScore();
-        initialise();
-    }
-
-    private Callback<HEIScore> getCallback(){
-        return new Callback<com.example.healthyz.HEIScore>() {
+        myViewModel.getTESTScore().observe(getViewLifecycleOwner(), new Observer<com.example.healthyz.HEIScore>() {
             @Override
-            public void onResponse(Call<com.example.healthyz.HEIScore> call, Response<com.example.healthyz.HEIScore> response) {
-                if(!response.isSuccessful()){
-                    TMP.setText("code: " + response.code());
-                    return;
-                }
-
-                com.example.healthyz.HEIScore loadedHEIScore = response.body();
-                String content = "";
-                content += "fatty_acids " + loadedHEIScore.getFatty_acids() + "\n";
-                content += "total_fruits " + loadedHEIScore.getTotal_fruits() + "\n";
-                content += "whole_fruits " + loadedHEIScore.getWhole_fruits() + "\n";
-                content += "total_vegies " + loadedHEIScore.getTotal_vegies() + "\n";
-                content += "greens_beans " + loadedHEIScore.getGreens_beans() + "\n";
-                content += "whole_grains " + loadedHEIScore.getWhole_grains() + "\n";
-                content += "dairy_things " + loadedHEIScore.getDairy_things() + "\n";
-                content += "protein_food " + loadedHEIScore.getProtein_food() + "\n";
-                content += "seas_plan_pr " + loadedHEIScore.getSeas_plan_pr() + "\n";
-                content += "added_sugars " + loadedHEIScore.getAdded_sugars() + "\n";
-                content += "refined_grain " + loadedHEIScore.getRefined_grain() + "\n";
-                content += "actual_sodium " + loadedHEIScore.getActual_sodium() + "\n";
-                content += "saturated_fats " + loadedHEIScore.getSaturated_fats() + "\n";
-                content += "estimated_sodium " + loadedHEIScore.getEstimated_sodium() + "\n";
-                TMP.setText(content);
+            public void onChanged(com.example.healthyz.HEIScore loadedHEIScore) {
+                float[] TEST = new float[14];
+                TEST[9] = (float) loadedHEIScore.getFatty_acids();
+                TEST[0] = (float) loadedHEIScore.getTotal_fruits();
+                TEST[1] = (float) loadedHEIScore.getWhole_fruits() ;
+                TEST[2] = (float) loadedHEIScore.getTotal_vegies();
+                TEST[3] = (float) loadedHEIScore.getGreens_beans();
+                TEST[4] = (float) loadedHEIScore.getWhole_grains();
+                TEST[8] = (float) loadedHEIScore.getDairy_things();
+                TEST[6] = (float) loadedHEIScore.getProtein_food();
+                TEST[7] = (float) loadedHEIScore.getSeas_plan_pr();
+                TEST[12] = (float) loadedHEIScore.getAdded_sugars();
+                TEST[5] = (float) loadedHEIScore.getRefined_grain();
+                TEST[13] = (float) loadedHEIScore.getActual_sodium();
+                TEST[10] = (float) loadedHEIScore.getSaturated_fats();
+                TEST[11] = (float) loadedHEIScore.getEstimated_sodium();
+                HEIScore = TEST;
+                initialise();
             }
+        });
 
-            @Override
-            public void onFailure(Call<com.example.healthyz.HEIScore> call, Throwable t) {
-                TMP.setText(t.getMessage());
-            }
-        };
     }
 
     private void initialise(){

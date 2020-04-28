@@ -4,6 +4,7 @@ import android.app.Application;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -18,10 +19,11 @@ public class MyViewModel extends AndroidViewModel {
     private int year;
     private int mealCounter;
     private HashMap<Integer, ArrayList<String>> table;
-    private float[] HEIScore;
 
     private MealRepository mRepository;
+    private ServerRepository sRepository;
     private LiveData<List<Meal>> mealsByDate;
+    private MutableLiveData<HEIScore> TEST;
 
     public MyViewModel (Application application) {
         super(application);
@@ -52,12 +54,14 @@ public class MyViewModel extends AndroidViewModel {
         mRepository = new MealRepository(application);
         mealsByDate = mRepository.getMealsByDate(currentDate);
 
+        sRepository = ServerRepository.getInstance();
+        TEST = sRepository.getTESTHEIScore();
+
         //FOR NOW ITS HARD CODED
-        HEIScore = new float[]{50,60,70,30,25,44,68,23,46,19,20,69,80};
     }
 
-    public float[] getHEIScore(){
-        return HEIScore;
+    public LiveData<HEIScore> getTESTScore(){
+        return TEST;
     }
 
     //added synchronized keyword
