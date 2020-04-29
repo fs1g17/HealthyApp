@@ -5,6 +5,7 @@ import android.app.Application;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Set;
 
 public class MyViewModel extends AndroidViewModel {
+    private int currentUserID;
     private String currentDate;
     private int day;
     private int month;
@@ -60,6 +62,18 @@ public class MyViewModel extends AndroidViewModel {
         //FOR NOW ITS HARD CODED
     }
 
+    public void setUserID(int userID){
+        currentUserID = userID;
+    }
+
+    public int getUserID(){
+        return currentUserID;
+    }
+
+    LiveData<List<Meal>> getUserInfo(){
+        return mRepository.getMealsByDate("00000000");
+    }
+
     public LiveData<HEIScore> getTESTScore(){
         return TEST;
     }
@@ -101,12 +115,6 @@ public class MyViewModel extends AndroidViewModel {
     public String getPrettyDate(){
         return day + "/" + (month+1) + "/" + year;
     }
-
-    /*
-    public void save(){
-        mRepository.save(table, currentDate);
-    }
-     */
 
     public void save(){
         mRepository.save(table,currentDate);

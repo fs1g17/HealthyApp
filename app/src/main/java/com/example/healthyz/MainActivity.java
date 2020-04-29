@@ -38,6 +38,17 @@ public class MainActivity extends AppCompatActivity {
                         .setDrawerLayout(drawerLayout)
                         .build();
         NavigationUI.setupWithNavController(navView, navController);
+
+        myViewModel.getUserInfo().observe(this, getUserInfoObserver());
+    }
+
+    private Observer<List<Meal>> getUserInfoObserver(){
+        return new Observer<List<Meal>>() {
+            @Override
+            public void onChanged(List<Meal> mealList) {
+                myViewModel.setUserID(mealList.get(0).getMealID());
+            }
+        };
     }
 
 }

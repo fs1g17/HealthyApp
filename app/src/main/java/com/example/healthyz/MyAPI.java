@@ -4,11 +4,12 @@ import com.google.gson.annotations.SerializedName;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Query;
 
 public interface MyAPI {
 
     @GET("HEICalc")
-    Call<HEIScore> getHEIScore(String userID, String date);
+    Call<HEIScore> getHEIScore(@Query("user_id") int userID, @Query("date") String date);
 
     @GET("TestServlet")
     Call<HEIScore> getTESTScore();
