@@ -116,7 +116,7 @@ public class FoodFragment extends Fragment implements View.OnClickListener, View
             thisCalories = userInputCalories.getText().toString();
 
             //TODO: implement pop up dialog notifying the user that the values in sodium and calories editext must be numbers
-            if(!thisFood.matches("") && thisSodium.matches("[0-9]*") && thisCalories.matches("[0-9]*")){
+            if(!thisFood.matches("") && thisSodium.matches("[0-9]+") && thisCalories.matches("[0-9]+")){
                 userInputFood.setText(thisFood);
                 userInputSodium.setText(thisSodium);
                 userInputCalories.setText(thisCalories);

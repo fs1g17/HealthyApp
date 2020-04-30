@@ -180,19 +180,21 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        if(tableHidden){
-            getChildFragmentManager()
-                    .beginTransaction()
-                    .add(R.id.table_container,HEITable.newInstance(HEIScore))
-                    .commit();
-            tableHidden = false;
-            tableToggle.setText("Hide Scores");
-        } else {
-            for(Fragment fragment : getChildFragmentManager().getFragments()){
-                getChildFragmentManager().beginTransaction().remove(fragment).commit();
+        if(HEIScore != null){
+            if(tableHidden){
+                getChildFragmentManager()
+                        .beginTransaction()
+                        .add(R.id.table_container,HEITable.newInstance(HEIScore))
+                        .commit();
+                tableHidden = false;
+                tableToggle.setText("Hide Scores");
+            } else {
+                for(Fragment fragment : getChildFragmentManager().getFragments()){
+                    getChildFragmentManager().beginTransaction().remove(fragment).commit();
+                }
+                tableHidden = true;
+                tableToggle.setText("View Scores");
             }
-            tableHidden = true;
-            tableToggle.setText("View Scores");
         }
     }
 
