@@ -97,6 +97,11 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         myViewModel = new ViewModelProvider(getActivity()).get(MyViewModel.class);
+        observeLocal();
+        observeRemote();
+    }
+
+    private void observeLocal(){
         myViewModel.getCurrentHEIRecord().observe(getActivity(), new Observer<List<HEIRecord>>() {
             @Override
             public void onChanged(List<HEIRecord> heiRecords) {
@@ -132,6 +137,9 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
                 }
             }
         });
+    }
+
+    private void observeRemote(){
         myViewModel.getTESTScore().observe(getActivity(), new Observer<com.example.healthyz.server.HEIScore>() {
             @Override
             public void onChanged(com.example.healthyz.server.HEIScore loadedHEIScore) {
