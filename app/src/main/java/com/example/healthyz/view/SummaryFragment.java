@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.healthyz.database.HEIRecord;
 import com.example.healthyz.viewmodel.MyViewModel;
 import com.example.healthyz.R;
 import com.github.mikephil.charting.charts.RadarChart;
@@ -29,7 +30,11 @@ import com.github.mikephil.charting.data.RadarEntry;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IRadarDataSet;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class SummaryFragment extends Fragment implements View.OnClickListener {
     private TextView TMP;
@@ -39,6 +44,21 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
     private boolean tableHidden;
     private RadarChart HEIChart;
     private MyViewModel myViewModel;
+
+    private static final String F_TOTAL = "total_fruits";
+    private static final String F_WHOLE = "whole_fruits";
+    private static final String V_TOTAL = "total_vegies";
+    private static final String V_GREEN = "greens_beans";
+    private static final String G_WHOLE = "whole_grains";
+    private static final String D_TOTAL = "dairy_things";
+    private static final String PF_TOTAL = "protein_food";
+    private static final String PF_SEA_PLANT = "seas_plan_pr";
+    private static final String FA = "fatty_acids";
+    private static final String G_REFINED = "refined_grain";
+    private static final String NA_EST = "estimated_sodium";
+    private static final String NA_ACT ="actual_sodium";
+    private static final String ADD_SUGARS = "added_sugars";
+    private static final String SAT_FATS = "saturated_fats";
 
     // TODO: Rename and change types and number of parameters
     public static SummaryFragment newInstance() {
@@ -55,6 +75,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
         tableToggle.setText("View Scores");
         tableHidden = true;
         TMP = thisView.findViewById(R.id.TMP);
+        HEIScore = new float[] {-1};
         return thisView;
     }
 
@@ -76,6 +97,41 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         myViewModel = new ViewModelProvider(getActivity()).get(MyViewModel.class);
+        myViewModel.getCurrentHEIRecord().observe(getActivity(), new Observer<List<HEIRecord>>() {
+            @Override
+            public void onChanged(List<HEIRecord> heiRecords) {
+                try{
+                    HEIRecord HEI = heiRecords.get(0);
+                    String heiJSONString = HEI.getHEIScore();
+                    JSONObject heiJSON = new JSONObject(heiJSONString);
+                    float[] TEST = new float[14];
+                    //TODO: get all the components
+                    TEST[0] = (float)heiJSON.getDouble(F_TOTAL);
+                    TEST[1] = (float)heiJSON.getDouble(F_WHOLE);
+                    TEST[2] = (float)heiJSON.getDouble(V_TOTAL);
+                    TEST[3] = (float)heiJSON.getDouble(V_GREEN);
+                    TEST[4] = (float)heiJSON.getDouble(G_WHOLE);
+                    TEST[5] = (float)heiJSON.getDouble(G_REFINED);
+                    TEST[6] = (float)heiJSON.getDouble(PF_TOTAL);
+                    TEST[7] = (float)heiJSON.getDouble(PF_SEA_PLANT);
+                    TEST[8] = (float)heiJSON.getDouble(D_TOTAL);
+                    TEST[9] = (float)heiJSON.getDouble(FA);
+                    TEST[10] = (float)heiJSON.getDouble(SAT_FATS);
+                    TEST[11] = (float)heiJSON.getDouble(NA_EST);
+                    TEST[12] = (float)heiJSON.getDouble(ADD_SUGARS);
+                    TEST[13] = (float)heiJSON.getDouble(NA_ACT);
+
+                    synchronized (HEIScore){
+                        if(HEIScore[0]==-1){
+                            HEIScore = TEST;
+                            initialise();
+                        }
+                    }
+                } catch(JSONException e){
+
+                }
+            }
+        });
         myViewModel.getTESTScore().observe(getActivity(), new Observer<com.example.healthyz.server.HEIScore>() {
             @Override
             public void onChanged(com.example.healthyz.server.HEIScore loadedHEIScore) {
@@ -94,11 +150,15 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
                 TEST[13] = (float) loadedHEIScore.getActual_sodium();
                 TEST[10] = (float) loadedHEIScore.getSaturated_fats();
                 TEST[11] = (float) loadedHEIScore.getEstimated_sodium();
-                HEIScore = TEST;
-                initialise();
+
+                synchronized (HEIScore){
+                    if(HEIScore[0]==-1){
+                        HEIScore = TEST;
+                        initialise();
+                    }
+                }
             }
         });
-
     }
 
     private void initialise(){
@@ -189,7 +249,6 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
             }
         }
     }
-
 
     private class RadarMarkerView extends MarkerView{
         public RadarMarkerView(Context context, int layoutResource) {

@@ -6,6 +6,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.healthyz.database.HEIRecord;
 import com.example.healthyz.database.Meal;
 import com.example.healthyz.database.MealRepository;
 import com.example.healthyz.server.HEIScore;
@@ -30,9 +31,9 @@ public class MyViewModel extends AndroidViewModel {
     private int mealCounter;
     private HashMap<Integer, JSONArray> table;
 
-    private MealRepository mRepository;
-    private ServerRepository sRepository;
+    private Repository repository;
     private LiveData<List<Meal>> mealsByDate;
+    private LiveData<List<HEIRecord>> heiRecordByDate;
     private MutableLiveData<HEIScore> TEST;
 
     public MyViewModel (Application application) {
@@ -61,13 +62,16 @@ public class MyViewModel extends AndroidViewModel {
             }
         }
 
-        mRepository = new MealRepository(application);
-        mealsByDate = mRepository.getMealsByDate(currentDate);
-
-        sRepository = ServerRepository.getInstance();
-        TEST = sRepository.getTESTHEIScore();
+        repository = new Repository(application);
+        mealsByDate = repository.getMealsByDate(currentDate);
+        heiRecordByDate = repository.getHEIRecordByDate(currentDate);
+        TEST = repository.getTESTHEIScore();
 
         //FOR NOW ITS HARD CODED
+    }
+
+    public LiveData<List<HEIRecord>> getCurrentHEIRecord(){
+        return heiRecordByDate;
     }
 
     public void setUserID(int userID){
@@ -79,7 +83,7 @@ public class MyViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<Meal>> getUserInfo(){
-        return mRepository.getMealsByDate("00000000");
+        return repository.getMealsByDate("00000000");
     }
 
     public LiveData<HEIScore> getTESTScore(){
@@ -113,7 +117,7 @@ public class MyViewModel extends AndroidViewModel {
         mealCounter = 0;
         table = new HashMap<>();
 
-        mealsByDate = mRepository.getMealsByDate(currentDate);
+        mealsByDate = repository.getMealsByDate(currentDate);
     }
 
     public int[] getDayMonthYear(){
@@ -125,7 +129,7 @@ public class MyViewModel extends AndroidViewModel {
     }
 
     public void save(){
-        mRepository.save(table,currentDate);
+        repository.saveMeals(table,currentDate);
     }
 
     //added synchronized keyword
@@ -142,7 +146,7 @@ public class MyViewModel extends AndroidViewModel {
     }
 
     public void insert(Meal meal){
-        mRepository.insert(meal);
+        repository.insert(meal);
     }
 
     //added synchronized keyword
