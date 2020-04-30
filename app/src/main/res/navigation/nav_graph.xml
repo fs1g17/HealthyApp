@@ -6,7 +6,7 @@
     app:startDestination="@id/foodDiaryFragment2">
     <fragment
         android:id="@+id/foodDiaryFragment2"
-        android:name="com.example.healthyz.FoodDiaryFragment"
+        android:name="com.example.healthyz.view.FoodDiaryFragment"
         android:label="Food Diary"
         tools:layout="@layout/fragment_food_diary" >
         <action
@@ -15,7 +15,7 @@
     </fragment>
     <fragment
         android:id="@+id/summaryFragment2"
-        android:name="com.example.healthyz.SummaryFragment"
+        android:name="com.example.healthyz.view.SummaryFragment"
         android:label="Summary"
         tools:layout="@layout/fragment_summary" >
         <action

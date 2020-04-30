@@ -5,7 +5,7 @@
     android:id="@+id/numerical_hei_table"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".HEITable"
+    tools:context=".view.HEITable"
     android:background="@color/colorSecondary"
     android:columnCount="4"
     android:layout_marginTop="35dp">

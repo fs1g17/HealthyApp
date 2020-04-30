@@ -1,4 +1,4 @@
-package com.example.healthyz;
+package com.example.healthyz.server;
 
 public class HEIScore {
     private double total_fruits;

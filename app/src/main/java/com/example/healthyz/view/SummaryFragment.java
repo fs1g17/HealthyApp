@@ -1,8 +1,7 @@
-package com.example.healthyz;
+package com.example.healthyz.view;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,10 +14,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.TableLayout;
 import android.widget.TextView;
 
+import com.example.healthyz.viewmodel.MyViewModel;
+import com.example.healthyz.R;
 import com.github.mikephil.charting.charts.RadarChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.MarkerView;
@@ -31,13 +30,6 @@ import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IRadarDataSet;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class SummaryFragment extends Fragment implements View.OnClickListener {
     private TextView TMP;
@@ -84,9 +76,9 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         myViewModel = new ViewModelProvider(getActivity()).get(MyViewModel.class);
-        myViewModel.getTESTScore().observe(getActivity(), new Observer<com.example.healthyz.HEIScore>() {
+        myViewModel.getTESTScore().observe(getActivity(), new Observer<com.example.healthyz.server.HEIScore>() {
             @Override
-            public void onChanged(com.example.healthyz.HEIScore loadedHEIScore) {
+            public void onChanged(com.example.healthyz.server.HEIScore loadedHEIScore) {
                 float[] TEST = new float[14];
                 TEST[9] = (float) loadedHEIScore.getFatty_acids();
                 TEST[0] = (float) loadedHEIScore.getTotal_fruits();
@@ -184,7 +176,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
             if(tableHidden){
                 getChildFragmentManager()
                         .beginTransaction()
-                        .add(R.id.table_container,HEITable.newInstance(HEIScore))
+                        .add(R.id.table_container, HEITable.newInstance(HEIScore))
                         .commit();
                 tableHidden = false;
                 tableToggle.setText("Hide Scores");

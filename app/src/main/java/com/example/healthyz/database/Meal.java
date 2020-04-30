@@ -1,4 +1,4 @@
-package com.example.healthyz;
+package com.example.healthyz.database;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;

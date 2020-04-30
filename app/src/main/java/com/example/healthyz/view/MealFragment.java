@@ -1,4 +1,4 @@
-package com.example.healthyz;
+package com.example.healthyz.view;
 
 import android.os.Bundle;
 
@@ -12,9 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
+import com.example.healthyz.viewmodel.MyViewModel;
+import com.example.healthyz.R;
+
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 

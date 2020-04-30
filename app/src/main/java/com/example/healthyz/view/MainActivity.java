@@ -1,7 +1,6 @@
-package com.example.healthyz;
+package com.example.healthyz.view;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -9,12 +8,12 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.widget.Toolbar;
 
+import com.example.healthyz.database.Meal;
+import com.example.healthyz.viewmodel.MyViewModel;
+import com.example.healthyz.R;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.List;

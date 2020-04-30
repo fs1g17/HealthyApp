@@ -1,4 +1,4 @@
-package com.example.healthyz;
+package com.example.healthyz.database;
 
 import android.content.Context;
 
@@ -11,9 +11,10 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Meal.class}, version = 1, exportSchema = false)
+@Database(entities = {Meal.class, HEIRecord.class}, version = 1, exportSchema = false)
 public abstract class MealRoomDatabase extends RoomDatabase {
     public abstract MealDao mealDao();
+    public abstract HEIRecordDao heiDao();
     private static volatile MealRoomDatabase INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;
 
@@ -25,7 +26,7 @@ public abstract class MealRoomDatabase extends RoomDatabase {
             synchronized (MealRoomDatabase.class){
                 if(INSTANCE == null){
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            MealRoomDatabase.class,"meal_database")
+                            MealRoomDatabase.class,"healthyz_database")
                             .addCallback(sRoomDatabaseCallback)
                             .build();
                 }

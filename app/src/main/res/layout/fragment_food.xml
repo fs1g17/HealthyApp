@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_margin="5dp"
     android:background="@color/colorSecondary"
-    tools:context=".FoodFragment"
+    tools:context=".view.FoodFragment"
     android:orientation="vertical">
 
     <LinearLayout

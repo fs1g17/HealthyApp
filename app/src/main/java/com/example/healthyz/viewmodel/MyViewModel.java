@@ -1,17 +1,21 @@
-package com.example.healthyz;
+package com.example.healthyz.viewmodel;
 
 import android.app.Application;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
+
+import com.example.healthyz.database.Meal;
+import com.example.healthyz.database.MealRepository;
+import com.example.healthyz.server.HEIScore;
+import com.example.healthyz.server.ServerRepository;
+import com.example.healthyz.view.FoodFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -74,7 +78,7 @@ public class MyViewModel extends AndroidViewModel {
         return currentUserID;
     }
 
-    LiveData<List<Meal>> getUserInfo(){
+    public LiveData<List<Meal>> getUserInfo(){
         return mRepository.getMealsByDate("00000000");
     }
 
@@ -133,7 +137,7 @@ public class MyViewModel extends AndroidViewModel {
         mealCounter = newValue;
     }
 
-    LiveData<List<Meal>> getAllMeals(){
+    public LiveData<List<Meal>> getAllMeals(){
         return mealsByDate;
     }
 

@@ -1,44 +1,70 @@
-package com.example.healthyz;
+package com.example.healthyz.database;
 
 import android.app.Application;
 
 import androidx.lifecycle.LiveData;
 
+import com.example.healthyz.database.HEIRecord;
+import com.example.healthyz.database.HEIRecordDao;
+import com.example.healthyz.database.Meal;
+import com.example.healthyz.database.MealDao;
+import com.example.healthyz.database.MealRoomDatabase;
+
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
-import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
-class MealRepository {
+public class MealRepository {
     private MealDao mMealDao;
+    private HEIRecordDao hHeiDao;
 
-    MealRepository(Application application){
+    public MealRepository(Application application){
         MealRoomDatabase db = MealRoomDatabase.getDatabase(application);
         mMealDao = db.mealDao();
+        hHeiDao = db.heiDao();
     }
 
-    LiveData<List<Meal>> getMealsByDate(String date){
+    public LiveData<List<HEIRecord>> getHEIRecordByDate(String date) { return hHeiDao.getHEIRecordByDate(date); }
+
+    public void insert(HEIRecord heiRecord){
+        MealRoomDatabase.databaseWriteExecutor.execute(() -> {
+            hHeiDao.insert(heiRecord);
+        });
+    }
+
+    public void deleteAllHEIRecords(){
+        MealRoomDatabase.databaseWriteExecutor.execute(() -> {
+            hHeiDao.deleteAll();
+        });
+    }
+
+    public void deleteHEIRecordByDate(String date){
+        MealRoomDatabase.databaseWriteExecutor.execute(() -> {
+            hHeiDao.deleteAllByDate(date);
+        });
+    }
+
+    public LiveData<List<Meal>> getMealsByDate(String date){
         return mMealDao.getMealsByDate(date);
     }
 
     //Must call insert on a non-UI thread of the app
-    void insert(Meal meal){
+    public void insert(Meal meal){
         MealRoomDatabase.databaseWriteExecutor.execute(() -> {
             mMealDao.insert(meal);
         });
     }
 
-    void deleteAll(){
+    public void deleteAll(){
         MealRoomDatabase.databaseWriteExecutor.execute(() -> {
             mMealDao.deleteAll();
         });
     }
 
-    void deleteByDate(String date){
+    public void deleteByDate(String date){
         MealRoomDatabase.databaseWriteExecutor.execute(() -> {
             mMealDao.deleteAllByDate(date);
         });
@@ -47,7 +73,7 @@ class MealRepository {
     //By calling deleteAll() before saving again, we ensure that deletion works
     //Removed any calls to other methods - this ensures that everything is done on one thread
     //TODO: fix dates
-    void save(@NotNull HashMap<Integer, JSONArray> table, String date){
+    public void save(@NotNull HashMap<Integer, JSONArray> table, String date){
         MealRoomDatabase.databaseWriteExecutor.execute(() -> {
             mMealDao.deleteAllByDate(date);
             Set<Integer> keySet = table.keySet();

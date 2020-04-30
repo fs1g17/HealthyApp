@@ -1,4 +1,4 @@
-package com.example.healthyz;
+package com.example.healthyz.server;
 
 import com.google.gson.annotations.SerializedName;
 

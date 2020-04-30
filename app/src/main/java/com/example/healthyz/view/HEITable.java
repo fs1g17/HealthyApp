@@ -1,4 +1,4 @@
-package com.example.healthyz;
+package com.example.healthyz.view;
 
 import android.os.Bundle;
 
@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.example.healthyz.R;
 
 public class HEITable extends Fragment {
     float[] HEIScore;
