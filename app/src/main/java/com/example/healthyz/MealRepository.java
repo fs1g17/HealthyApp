@@ -5,6 +5,8 @@ import android.app.Application;
 import androidx.lifecycle.LiveData;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,7 +47,37 @@ class MealRepository {
     //By calling deleteAll() before saving again, we ensure that deletion works
     //Removed any calls to other methods - this ensures that everything is done on one thread
     //TODO: fix dates
-    void save(@NotNull HashMap<Integer, ArrayList<String>> table, String date){
+    void save(@NotNull HashMap<Integer, JSONArray> table, String date){
+        MealRoomDatabase.databaseWriteExecutor.execute(() -> {
+            mMealDao.deleteAllByDate(date);
+            Set<Integer> keySet = table.keySet();
+
+            if(!keySet.isEmpty()){
+                for(Integer mealID : keySet){
+                    JSONArray foodList = table.get(mealID);
+
+                    if(foodList.length() == 0){
+                        //DO NOTHING
+                    }
+                    else{
+                        //the replace statment ensures everything is written to the database correctly
+                        String foods = foodList.toString().replace("'","''");
+                        Meal meal = new Meal(date,mealID,foods);
+                        mMealDao.insert(meal);
+                    }
+                }
+            }
+        });
+    }
+}
+
+//Room executes all queries on a separate thread. Then observed LiveData will notify the observer
+// on the main thread when the data has changed. We need to not run the insert on the main thread,
+// so we use the ExecutorService we created in the WordRoomDatabase to perform the insert on a
+// background thread.
+
+/*
+void save(@NotNull HashMap<Integer, ArrayList<String>> table, String date){
         MealRoomDatabase.databaseWriteExecutor.execute(() -> {
             mMealDao.deleteAllByDate(date);
             Set<Integer> keySet = table.keySet();
@@ -75,9 +107,4 @@ class MealRepository {
             }
         });
     }
-}
-
-//Room executes all queries on a separate thread. Then observed LiveData will notify the observer
-// on the main thread when the data has changed. We need to not run the insert on the main thread,
-// so we use the ExecutorService we created in the WordRoomDatabase to perform the insert on a
-// background thread.
+ */

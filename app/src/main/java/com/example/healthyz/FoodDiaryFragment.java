@@ -18,6 +18,9 @@ import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -72,7 +75,8 @@ public class FoodDiaryFragment extends Fragment implements View.OnClickListener,
                             highestMealID = mealID;
                         }
 
-                        String foodList = meal.getMeal();
+                        //"'" is replaced with "''" (MealRepository:64), here the action is reversed
+                        String foodList = meal.getMeal().replace("''","'");
                         FoodDiaryFragment
                                 .this
                                 .getChildFragmentManager()
@@ -80,7 +84,13 @@ public class FoodDiaryFragment extends Fragment implements View.OnClickListener,
                                 .add(R.id.food_diary_container,
                                         MealFragment.restoreInstance(mealID,foodList))
                                 .commit();
-                        myViewModel.addMeal(mealID,foodList.split("\t"));
+
+                        try{
+                            JSONArray foodListJSONArray = new JSONArray(foodList);
+                            myViewModel.addMeal(mealID,foodListJSONArray);
+                        } catch (JSONException e){
+                            //TODO: make a pop up dialog maybe?
+                        }
                     }
                     myViewModel.setMealCounter(highestMealID + 1);
                 }
@@ -97,29 +107,16 @@ public class FoodDiaryFragment extends Fragment implements View.OnClickListener,
         else{
             Set<Integer> keySet = myViewModel.getTableKeySet();
             for(Integer i : keySet){
-                ArrayList<String> foodList = myViewModel.getFoodList(i);
+                JSONArray foodListJSONArray = myViewModel.getFoodList(i);
 
-                if(foodList.isEmpty()){
+                if(foodListJSONArray.length() == 0){
                     //DO NOTHING
                 }
-                else if(foodList.size() == 1){
-                    getChildFragmentManager()
-                            .beginTransaction()
-                            .add(R.id.food_diary_container,
-                                    MealFragment.restoreInstance(i,foodList.get(0)))
-                            .commit();
-                }
                 else{
-                    String foods = foodList.get(0);
-
-                    for(int j=1; j<foodList.size(); j++){
-                        foods = foods + "\t" + foodList.get(j);
-                    }
-
                     getChildFragmentManager()
                             .beginTransaction()
                             .add(R.id.food_diary_container,
-                                    MealFragment.restoreInstance(i,foods))
+                                    MealFragment.restoreInstance(i,foodListJSONArray.toString()))
                             .commit();
                 }
 
@@ -133,9 +130,8 @@ public class FoodDiaryFragment extends Fragment implements View.OnClickListener,
             if(!myViewModel.isLastMealEmpty()){
                 myViewModel.createMeal();
                 int mealNumber = myViewModel.getMealCounter();
-                MealFragment currentEntry = MealFragment.newInstance(mealNumber);
                 getChildFragmentManager().beginTransaction()
-                        .add(R.id.food_diary_container, currentEntry)
+                        .add(R.id.food_diary_container, MealFragment.newInstance(mealNumber))
                         .commit();
                 myViewModel.incrementMealCounter();
             }

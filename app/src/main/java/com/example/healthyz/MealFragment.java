@@ -12,6 +12,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 public class MealFragment extends Fragment implements View.OnClickListener, View.OnLongClickListener {
@@ -30,10 +34,10 @@ public class MealFragment extends Fragment implements View.OnClickListener, View
         return fragment;
     }
 
-    public static MealFragment restoreInstance(int mealNumber, String foodList){
+    public static MealFragment restoreInstance(int mealNumber, String foodJSONArray){
         Bundle args = new Bundle();
         args.putInt("mealNumber",mealNumber);
-        args.putString("foodList",foodList);
+        args.putString("foodJSONArray",foodJSONArray);
         MealFragment fragment = new MealFragment();
         fragment.setArguments(args);
         return fragment;
@@ -43,18 +47,21 @@ public class MealFragment extends Fragment implements View.OnClickListener, View
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mealNumber = this.getArguments().getInt("mealNumber");
-        String food;
 
-        if(this.getArguments().containsKey("foodList")){
-            food = this.getArguments().getString("foodList");
-            String[] foodArray = food.split("\t");
+        if(this.getArguments().containsKey("foodJSONArray")){
+            try {
+                String foodJSONArrayString = this.getArguments().getString("foodJSONArray");
+                JSONArray foodJSONArray = new JSONArray(foodJSONArrayString);
 
-            for(int i=0; i<foodArray.length; i++){
-                getChildFragmentManager()
-                        .beginTransaction()
-                        .add(R.id.food_item_container,
-                                FoodFragment.restoreInstance(mealNumber,foodArray[i]))
-                        .commit();
+                for(int i=0; i<foodJSONArray.length(); i++){
+                    getChildFragmentManager()
+                            .beginTransaction()
+                            .add(R.id.food_item_container,
+                                    FoodFragment.restoreInstance(mealNumber,foodJSONArray.getJSONObject(i).toString()))
+                            .commit();
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
         }
         else{
@@ -86,24 +93,16 @@ public class MealFragment extends Fragment implements View.OnClickListener, View
     @Override
     public void onClick(View v) {
         if(!actionButtonIsDelete){
-            int foodItemID = mealNumber;
-            getChildFragmentManager().beginTransaction().add(R.id.food_item_container, FoodFragment.newInstance(foodItemID)).commit();
+            getChildFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.food_item_container, FoodFragment.newInstance(mealNumber))
+                    .commit();
         }
         else{
             myViewModel.removeMeal(mealNumber);
             getParentFragmentManager().beginTransaction().remove(this).commit();
         }
     }
-
-    /*
-    @Override
-    public boolean onLongClick(View v) {
-        if(myViewModel.getFoodList(mealNumber).isEmpty()){
-            setActionButtonToDelete();
-        }
-        return true;
-    }
-     */
 
     @Override
     public boolean onLongClick(View v) {

@@ -13,14 +13,28 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class FoodFragment extends Fragment implements View.OnClickListener, View.OnLongClickListener {
     private View thisView;
-    private ImageButton actionButton;
-    private EditText userInputFood;
-    private String thisFoodItem;
     private int mealNumber;
+    public static final String JSONFOOD = "food_item";
+    public static final String JSONKCAL = "calories";
+    public static final String JSONSALT = "sodium";
+
+    private String jsonInfo;
+    private String thisFood;
+    private String thisSodium;
+    private String thisCalories;
+    
+    private EditText userInputFood;
+    private EditText userInputSodium;
+    private EditText userInputCalories;
+    
     private MyViewModel myViewModel;
     private boolean actionButtonIsOK;
+    private ImageButton actionButton;
     private int foodItemContainer;
 
     public static FoodFragment newInstance(int mealNumber) {
@@ -31,10 +45,10 @@ public class FoodFragment extends Fragment implements View.OnClickListener, View
         return fragment;
     }
 
-    public static FoodFragment restoreInstance(int mealNumber, String thisFoodItem){
+    public static FoodFragment restoreInstance(int mealNumber, String jsonInfo){
         Bundle args = new Bundle();
         args.putInt("mealNumber",mealNumber);
-        args.putString("thisFoodItem",thisFoodItem);
+        args.putString("jsonInfo",jsonInfo);
         FoodFragment fragment = new FoodFragment();
         fragment.setArguments(args);
         return fragment;
@@ -45,8 +59,16 @@ public class FoodFragment extends Fragment implements View.OnClickListener, View
         super.onCreate(savedInstanceState);
         mealNumber = this.getArguments().getInt("mealNumber");
 
-        if(this.getArguments().containsKey("thisFoodItem")){
-            thisFoodItem = this.getArguments().getString("thisFoodItem");
+        if(this.getArguments().containsKey("jsonInfo")){
+            try {
+                jsonInfo = this.getArguments().getString("jsonInfo");
+                JSONObject info = new JSONObject(jsonInfo);
+                thisFood = info.getString(JSONFOOD);
+                thisSodium = info.getString(JSONSALT);
+                thisCalories = info.getString(JSONKCAL);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -63,10 +85,17 @@ public class FoodFragment extends Fragment implements View.OnClickListener, View
         actionButton = thisView.findViewById(R.id.user_input_food_ok);
         actionButtonIsOK = true;
         userInputFood = thisView.findViewById(R.id.user_input_food);
+        userInputSodium = thisView.findViewById(R.id.user_input_sodium);
+        userInputCalories = thisView.findViewById(R.id.user_input_calories);
 
-        if(thisFoodItem != null){
-            userInputFood.setText(thisFoodItem);
+        if(thisFood != null && thisSodium != null && thisCalories != null){
+            userInputFood.setText(thisFood);
+            userInputSodium.setText(thisSodium);
+            userInputCalories.setText(thisCalories);
+
             userInputFood.setKeyListener(null);
+            userInputSodium.setKeyListener(null);
+            userInputCalories.setKeyListener(null);
         }
 
         actionButton.setOnClickListener(this);
@@ -82,22 +111,48 @@ public class FoodFragment extends Fragment implements View.OnClickListener, View
     @Override
     public void onClick(View v) {
         if(actionButtonIsOK){
-            thisFoodItem = userInputFood.getText().toString();
-            if(!thisFoodItem.matches("")){
-                userInputFood.setText(thisFoodItem);
-                myViewModel.addFood(mealNumber,thisFoodItem);
+            thisFood = userInputFood.getText().toString();
+            thisSodium = userInputSodium.getText().toString();
+            thisCalories = userInputCalories.getText().toString();
+
+            //TODO: implement pop up dialog notifying the user that the values in sodium and calories editext must be numbers
+            if(!thisFood.matches("") && thisSodium.matches("[0-9]*") && thisCalories.matches("[0-9]*")){
+                userInputFood.setText(thisFood);
+                userInputSodium.setText(thisSodium);
+                userInputCalories.setText(thisCalories);
+
                 userInputFood.setKeyListener(null);
+                userInputSodium.setKeyListener(null);
+                userInputCalories.setKeyListener(null);
+
+                try {
+                    JSONObject info = new JSONObject();
+                    info.put(JSONFOOD,thisFood);
+                    info.put(JSONSALT,thisSodium);
+                    info.put(JSONKCAL,thisCalories);
+                    myViewModel.addFood(mealNumber, info);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         }
-        else if(thisFoodItem != null){
-            myViewModel.removeFood(mealNumber,thisFoodItem);
-            getParentFragmentManager().beginTransaction().remove(this).commit();
+        else if(thisFood != null){
+            try{
+                JSONObject currentFoodItem = new JSONObject();
+                currentFoodItem.put(JSONFOOD, thisFood);
+                currentFoodItem.put(JSONSALT, thisSodium);
+                currentFoodItem.put(JSONKCAL, thisCalories);
+                myViewModel.removeFood(mealNumber, currentFoodItem);
+                getParentFragmentManager().beginTransaction().remove(this).commit();
+            } catch (JSONException e){
+                //TODO: implement pop up dialog to notify the user
+            }
         }
     }
 
     @Override
     public boolean onLongClick(View v) {
-        if(thisFoodItem != null){
+        if(thisFood != null){
             setActionButton(false);
         }
         return true;

@@ -7,6 +7,10 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -20,7 +24,7 @@ public class MyViewModel extends AndroidViewModel {
     private int month;
     private int year;
     private int mealCounter;
-    private HashMap<Integer, ArrayList<String>> table;
+    private HashMap<Integer, JSONArray> table;
 
     private MealRepository mRepository;
     private ServerRepository sRepository;
@@ -121,13 +125,7 @@ public class MyViewModel extends AndroidViewModel {
     }
 
     //added synchronized keyword
-    public synchronized void addMeal(int mealID, String[] foods){
-        ArrayList<String> foodList = new ArrayList<>();
-
-        for(String food : foods){
-            foodList.add(food);
-        }
-
+    public synchronized void addMeal(int mealID, JSONArray foodList){
         table.put(mealID,foodList);
     }
 
@@ -145,7 +143,7 @@ public class MyViewModel extends AndroidViewModel {
 
     //added synchronized keyword
     public synchronized void createMeal(){
-        ArrayList<String> foodList = new ArrayList<>();
+        JSONArray foodList = new JSONArray();
         table.put(mealCounter,foodList);
     }
 
@@ -175,25 +173,46 @@ public class MyViewModel extends AndroidViewModel {
 
         boolean empty = true;
         for(Integer i : table.keySet()){
-            empty = table.get(i).isEmpty();
+            if(table.get(i).length() == 0){
+                empty = true;
+            } else {
+                empty = false;
+            }
         }
         return empty;
     }
 
     //added synchronized keyword
-    public synchronized ArrayList<String> getFoodList(int meal){
+    public synchronized JSONArray getFoodList(int meal){
         return table.get(meal);
     }
 
     //added synchronized keyword
-    public synchronized void addFood(int meal, String food){
-        table.get(meal).add(food);
+    public synchronized void addFood(int meal, JSONObject food){
+        table.get(meal).put(food);
     }
 
     //added synchronized keyword
-    public synchronized void removeFood(int meal, String food){
-        table.get(meal).remove(food);
-        //DELETE EntryFragment if this is empty
+    public synchronized void removeFood(int meal, JSONObject food){
+        JSONArray foodList = table.get(meal);
+        for(int i=0; i<foodList.length(); i++){
+            try{
+                JSONObject jo = foodList.getJSONObject(i);
+                String joFood = jo.getString(FoodFragment.JSONFOOD);
+                String joSalt = jo.getString(FoodFragment.JSONSALT);
+                String joKCal = jo.getString(FoodFragment.JSONKCAL);
+
+                String foodFood = food.getString(FoodFragment.JSONFOOD);
+                String foodSalt = food.getString(FoodFragment.JSONSALT);
+                String foodKCal = food.getString(FoodFragment.JSONKCAL);
+
+                if(joFood.equals(foodFood) && joSalt.equals(foodSalt) && joKCal.equals(foodKCal)){
+                    foodList.remove(i);
+                }
+            } catch (JSONException e){
+                //TODO: implement error popup
+            }
+        }
     }
 
     //added synchronized keyword

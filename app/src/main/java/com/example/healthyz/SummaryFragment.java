@@ -84,7 +84,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         myViewModel = new ViewModelProvider(getActivity()).get(MyViewModel.class);
-        myViewModel.getTESTScore().observe(getViewLifecycleOwner(), new Observer<com.example.healthyz.HEIScore>() {
+        myViewModel.getTESTScore().observe(getActivity(), new Observer<com.example.healthyz.HEIScore>() {
             @Override
             public void onChanged(com.example.healthyz.HEIScore loadedHEIScore) {
                 float[] TEST = new float[14];
