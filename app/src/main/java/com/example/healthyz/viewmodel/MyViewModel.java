@@ -79,6 +79,8 @@ public class MyViewModel extends AndroidViewModel {
 
     }
 
+    public void saveHEIScore(String retrievedScore){repository.insert(new HEIRecord(currentDate,retrievedScore));}
+
     public LiveData<String> getLocalHEI(){
         return localHEI;
     }

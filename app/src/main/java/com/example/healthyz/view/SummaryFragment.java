@@ -104,78 +104,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
         MediatorLiveData<String> liveDataMerger = new MediatorLiveData<>();
         liveDataMerger.addSource(myViewModel.getLocalHEI(), value -> liveDataMerger.setValue(value));
         liveDataMerger.addSource(myViewModel.getRemoteHEI(), value -> liveDataMerger.setValue(value));
-
         liveDataMerger.observe(getViewLifecycleOwner(),getNewObserver());
-        //OLD STUFF
-        //observeLocal();
-        //observeRemote();
-
-        //LiveData<String> best = Lives.concat(myViewModel.getLocalHEI(), myViewModel.getRemoteHEI());
-        //LiveData<String> first = Lives.first(Lives.concat(myViewModel.getLocalHEI(), myViewModel.getRemoteHEI()));
-
-        //THIS IS THE PROBLEM
-        /*
-        Lives.first(Lives.concatWith(myViewModel.getRemoteHEI(), myViewModel.getLocalHEI())).observe(getActivity(), new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-                try{
-                    JSONObject heiJSON = new JSONObject(s);
-                    float[] TEST = new float[14];
-                    //TODO: get all the components
-                    TEST[0] = (float)heiJSON.getDouble(F_TOTAL);
-                    TEST[1] = (float)heiJSON.getDouble(F_WHOLE);
-                    TEST[2] = (float)heiJSON.getDouble(V_TOTAL);
-                    TEST[3] = (float)heiJSON.getDouble(V_GREEN);
-                    TEST[4] = (float)heiJSON.getDouble(G_WHOLE);
-                    TEST[5] = (float)heiJSON.getDouble(G_REFINED);
-                    TEST[6] = (float)heiJSON.getDouble(PF_TOTAL);
-                    TEST[7] = (float)heiJSON.getDouble(PF_SEA_PLANT);
-                    TEST[8] = (float)heiJSON.getDouble(D_TOTAL);
-                    TEST[9] = (float)heiJSON.getDouble(FA);
-                    TEST[10] = (float)heiJSON.getDouble(SAT_FATS);
-                    TEST[11] = (float)heiJSON.getDouble(NA_EST);
-                    TEST[12] = (float)heiJSON.getDouble(ADD_SUGARS);
-                    TEST[13] = (float)heiJSON.getDouble(NA_ACT);
-                    HEIScore = TEST;
-                } catch (JSONException e){
-                    HEIScore = new float[]{10,10,10,10,10,10,10,10,10,10,10,10,10,10};
-                }
-                initialise();
-            }
-        });
-         */
-
-        /*
-        Lives.first(Lives.concat(myViewModel.getRemoteHEI(), myViewModel.getLocalHEI()))
-                .observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-                try{
-                    JSONObject heiJSON = new JSONObject(s);
-                    float[] TEST = new float[14];
-                    //TODO: get all the components
-                    TEST[0] = (float)heiJSON.getDouble(F_TOTAL);
-                    TEST[1] = (float)heiJSON.getDouble(F_WHOLE);
-                    TEST[2] = (float)heiJSON.getDouble(V_TOTAL);
-                    TEST[3] = (float)heiJSON.getDouble(V_GREEN);
-                    TEST[4] = (float)heiJSON.getDouble(G_WHOLE);
-                    TEST[5] = (float)heiJSON.getDouble(G_REFINED);
-                    TEST[6] = (float)heiJSON.getDouble(PF_TOTAL);
-                    TEST[7] = (float)heiJSON.getDouble(PF_SEA_PLANT);
-                    TEST[8] = (float)heiJSON.getDouble(D_TOTAL);
-                    TEST[9] = (float)heiJSON.getDouble(FA);
-                    TEST[10] = (float)heiJSON.getDouble(SAT_FATS);
-                    TEST[11] = (float)heiJSON.getDouble(NA_EST);
-                    TEST[12] = (float)heiJSON.getDouble(ADD_SUGARS);
-                    TEST[13] = (float)heiJSON.getDouble(NA_ACT);
-                    HEIScore = TEST;
-                } catch (JSONException e){
-                    HEIScore = new float[]{10,10,10,10,10,10,10,10,10,10,10,10,10,10};
-                }
-                initialise();
-            }
-        });
-        */
     }
 
     private Observer<String> getNewObserver(){
@@ -183,6 +112,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
             if(HEIScore == null){
                 try{
                     JSONObject heiJSON = new JSONObject(s);
+                    myViewModel.saveHEIScore(heiJSON.toString());
                     float[] TEST = new float[14];
                     //TODO: get all the components
                     TEST[0] = (float)heiJSON.getDouble(F_TOTAL);
@@ -207,74 +137,6 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
                 }
             }
         };
-    }
-
-    private void observeLocal(){
-        myViewModel.getCurrentHEIRecord().observe(getActivity(), new Observer<List<HEIRecord>>() {
-            @Override
-            public void onChanged(List<HEIRecord> heiRecords) {
-                try{
-                    HEIRecord HEI = heiRecords.get(0);
-                    String heiJSONString = HEI.getHEIScore();
-                    JSONObject heiJSON = new JSONObject(heiJSONString);
-                    float[] TEST = new float[14];
-                    //TODO: get all the components
-                    TEST[0] = (float)heiJSON.getDouble(F_TOTAL);
-                    TEST[1] = (float)heiJSON.getDouble(F_WHOLE);
-                    TEST[2] = (float)heiJSON.getDouble(V_TOTAL);
-                    TEST[3] = (float)heiJSON.getDouble(V_GREEN);
-                    TEST[4] = (float)heiJSON.getDouble(G_WHOLE);
-                    TEST[5] = (float)heiJSON.getDouble(G_REFINED);
-                    TEST[6] = (float)heiJSON.getDouble(PF_TOTAL);
-                    TEST[7] = (float)heiJSON.getDouble(PF_SEA_PLANT);
-                    TEST[8] = (float)heiJSON.getDouble(D_TOTAL);
-                    TEST[9] = (float)heiJSON.getDouble(FA);
-                    TEST[10] = (float)heiJSON.getDouble(SAT_FATS);
-                    TEST[11] = (float)heiJSON.getDouble(NA_EST);
-                    TEST[12] = (float)heiJSON.getDouble(ADD_SUGARS);
-                    TEST[13] = (float)heiJSON.getDouble(NA_ACT);
-
-                    synchronized (HEIScore){
-                        if(HEIScore[0]==-1){
-                            HEIScore = TEST;
-                            initialise();
-                        }
-                    }
-                } catch(JSONException e){
-
-                }
-            }
-        });
-    }
-
-    private void observeRemote(){
-        myViewModel.getTESTScore().observe(getActivity(), new Observer<com.example.healthyz.server.HEIScore>() {
-            @Override
-            public void onChanged(com.example.healthyz.server.HEIScore loadedHEIScore) {
-                float[] TEST = new float[14];
-                TEST[9] = (float) loadedHEIScore.getFatty_acids();
-                TEST[0] = (float) loadedHEIScore.getTotal_fruits();
-                TEST[1] = (float) loadedHEIScore.getWhole_fruits() ;
-                TEST[2] = (float) loadedHEIScore.getTotal_vegies();
-                TEST[3] = (float) loadedHEIScore.getGreens_beans();
-                TEST[4] = (float) loadedHEIScore.getWhole_grains();
-                TEST[8] = (float) loadedHEIScore.getDairy_things();
-                TEST[6] = (float) loadedHEIScore.getProtein_food();
-                TEST[7] = (float) loadedHEIScore.getSeas_plan_pr();
-                TEST[12] = (float) loadedHEIScore.getAdded_sugars();
-                TEST[5] = (float) loadedHEIScore.getRefined_grain();
-                TEST[13] = (float) loadedHEIScore.getActual_sodium();
-                TEST[10] = (float) loadedHEIScore.getSaturated_fats();
-                TEST[11] = (float) loadedHEIScore.getEstimated_sodium();
-
-                synchronized (HEIScore){
-                    if(HEIScore[0]==-1){
-                        HEIScore = TEST;
-                        initialise();
-                    }
-                }
-            }
-        });
     }
 
     private void initialise(){
