@@ -36,6 +36,11 @@ public class MyViewModel extends AndroidViewModel {
     private LiveData<List<HEIRecord>> heiRecordByDate;
     private MutableLiveData<HEIScore> TEST;
 
+    //TESTING
+    //TODO: this is a test
+    private LiveData<String> localHEI;
+    private LiveData<String> remoteHEI;
+
     public MyViewModel (Application application) {
         super(application);
         mealCounter = 0;
@@ -68,6 +73,18 @@ public class MyViewModel extends AndroidViewModel {
         TEST = repository.getTESTHEIScore();
 
         //FOR NOW ITS HARD CODED
+
+        localHEI = repository.getHEIStringByDate(currentDate);
+        remoteHEI = repository.getTESTString();
+
+    }
+
+    public LiveData<String> getLocalHEI(){
+        return localHEI;
+    }
+
+    public LiveData<String> getRemoteHEI(){
+        return remoteHEI;
     }
 
     public LiveData<List<HEIRecord>> getCurrentHEIRecord(){

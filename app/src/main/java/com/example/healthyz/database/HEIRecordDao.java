@@ -21,4 +21,8 @@ public interface HEIRecordDao {
 
     @Query("SELECT * FROM hei_table WHERE date = :date")
     LiveData<List<HEIRecord>> getHEIRecordByDate(String date);
+
+    //might have to remove LIMIT 1
+    @Query("SELECT hei_score FROM hei_table WHERE date = :date LIMIT 1")
+    LiveData<String> getHEIStringByDate(String date);
 }

@@ -27,6 +27,11 @@ public class MealRepository {
         hHeiDao = db.heiDao();
     }
 
+    //TEST
+    //TODO: this is a test
+    public LiveData<String> getHEIStringByDate(String date){return hHeiDao.getHEIStringByDate(date);}
+    //TEST
+
     public LiveData<List<HEIRecord>> getHEIRecordByDate(String date) { return hHeiDao.getHEIRecordByDate(date); }
 
     public void insert(HEIRecord heiRecord){

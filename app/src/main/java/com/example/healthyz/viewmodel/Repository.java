@@ -61,4 +61,10 @@ public class Repository {
 
     //REMOTE: getting test score
     public MutableLiveData<HEIScore> getTESTHEIScore(){return sRepository.getTESTHEIScore();}
+
+
+    //TESTING
+    //TODO: this is a test
+    public LiveData<String> getHEIStringByDate(String date){return mRepository.getHEIStringByDate(date);}
+    public LiveData<String> getTESTString(){return sRepository.getTESTString();}
 }

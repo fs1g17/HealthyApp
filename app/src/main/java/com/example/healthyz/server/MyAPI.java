@@ -16,6 +16,14 @@ public interface MyAPI {
 
     @GET("getNewUserID")
     Call<UserID> getNewUserID();
+
+    /*
+    @GET("getStringHEI")
+    Call<String> getTESTString();
+     */
+
+    @GET("TestServlet")
+    Call<String> getTESTString();
 }
 
 class UserID {
