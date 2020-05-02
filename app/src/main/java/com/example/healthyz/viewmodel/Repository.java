@@ -11,6 +11,7 @@ import com.example.healthyz.database.Meal;
 import com.example.healthyz.database.MealDao;
 import com.example.healthyz.database.MealRepository;
 import com.example.healthyz.database.MealRoomDatabase;
+import com.example.healthyz.server.DayOfEating;
 import com.example.healthyz.server.HEIScore;
 import com.example.healthyz.server.ServerRepository;
 
@@ -66,5 +67,10 @@ public class Repository {
     //TESTING
     //TODO: this is a test
     public LiveData<String> getHEIStringByDate(String date){return mRepository.getHEIStringByDate(date);}
-    public LiveData<String> getTESTString(){return sRepository.getTESTString();}
+    public LiveData<String> getTESTString(String date){return sRepository.getTESTString(date);}
+
+    public LiveData<String> upload(DayOfEating doe){return sRepository.upload(doe);}
+
+    public LiveData<String> upload(int userID, String date, String foodList){ return sRepository.upload(userID,date,foodList); }
+    public LiveData<String> getHEIStringFromServer(int userID, String uglyDate){return sRepository.getHEIString(userID,uglyDate);}
 }

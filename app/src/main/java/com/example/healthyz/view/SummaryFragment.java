@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.healthyz.database.HEIRecord;
+import com.example.healthyz.database.Meal;
 import com.example.healthyz.viewmodel.MyViewModel;
 import com.example.healthyz.R;
 import com.github.mikephil.charting.charts.RadarChart;
@@ -33,6 +34,7 @@ import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IRadarDataSet;
 import com.snakydesign.livedataextensions.Lives;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -101,10 +103,31 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
         super.onActivityCreated(savedInstanceState);
         myViewModel = new ViewModelProvider(getActivity()).get(MyViewModel.class);
 
+        /*
         MediatorLiveData<String> liveDataMerger = new MediatorLiveData<>();
         liveDataMerger.addSource(myViewModel.getLocalHEI(), value -> liveDataMerger.setValue(value));
         liveDataMerger.addSource(myViewModel.getRemoteHEI(), value -> liveDataMerger.setValue(value));
         liveDataMerger.observe(getViewLifecycleOwner(),getNewObserver());
+         */
+
+        myViewModel.getAllMeals().observe(getViewLifecycleOwner(), new Observer<List<Meal>>() {
+            @Override
+            public void onChanged(List<Meal> meals) {
+                try{
+                    JSONArray mealList = new JSONArray();
+                    for(Meal meal : meals){
+                        JSONObject jo = new JSONObject();
+                        JSONArray foodList = new JSONArray(meal.getMeal());
+                        jo.put("meal_id",meal.getMealID());
+                        jo.put("food_list",foodList);
+                        mealList.put(jo);
+                    }
+                    myViewModel.upload(9898,myViewModel.getUglyDate(),mealList.toString()).observe(getViewLifecycleOwner(), getNewObserver());
+                } catch (JSONException e){
+
+                }
+            }
+        });
     }
 
     private Observer<String> getNewObserver(){
@@ -132,8 +155,50 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
                     HEIScore = TEST;
                     initialise();
                 } catch (JSONException e){
-                    HEIScore = new float[]{10,10,10,10,10,10,10,10,10,10,10,10,10,10};
-                    initialise();
+                    //HEIScore = new float[]{10,10,10,10,10,10,10,10,10,10,10,10,10,10};
+                    //initialise();
+                    TMP.setText(s);
+                }
+            } else {
+                //TODO: udpdate it if its different now
+                try{
+                    //if the HEI score retrieved from the server differs to the current one, update
+                    JSONObject heiJSON = new JSONObject(s);
+                    float[] TEST = new float[14];
+                    //TODO: get all the components
+                    TEST[0] = (float)heiJSON.getDouble(F_TOTAL);
+                    TEST[1] = (float)heiJSON.getDouble(F_WHOLE);
+                    TEST[2] = (float)heiJSON.getDouble(V_TOTAL);
+                    TEST[3] = (float)heiJSON.getDouble(V_GREEN);
+                    TEST[4] = (float)heiJSON.getDouble(G_WHOLE);
+                    TEST[5] = (float)heiJSON.getDouble(G_REFINED);
+                    TEST[6] = (float)heiJSON.getDouble(PF_TOTAL);
+                    TEST[7] = (float)heiJSON.getDouble(PF_SEA_PLANT);
+                    TEST[8] = (float)heiJSON.getDouble(D_TOTAL);
+                    TEST[9] = (float)heiJSON.getDouble(FA);
+                    TEST[10] = (float)heiJSON.getDouble(SAT_FATS);
+                    TEST[11] = (float)heiJSON.getDouble(NA_EST);
+                    TEST[12] = (float)heiJSON.getDouble(ADD_SUGARS);
+                    TEST[13] = (float)heiJSON.getDouble(NA_ACT);
+
+                    boolean equal = true;
+                    if(HEIScore.length != TEST.length){
+                        equal = false;
+                    } else {
+                        for(int i=0; i<HEIScore.length; i++){
+                            if(HEIScore[i] != TEST[i]){
+                                equal = false;
+                            }
+                        }
+                    }
+
+                    if(!equal){
+                        myViewModel.saveHEIScore(heiJSON.toString());
+                        HEIScore = TEST;
+                        initialise();
+                    }
+                } catch(JSONException e){
+                    //DO NOTHING
                 }
             }
         };
@@ -167,7 +232,15 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
         yAxis.setLabelCount(5, false);
         yAxis.setTextSize(15f);
         yAxis.setAxisMinimum(0f);
-        yAxis.setAxisMaximum(100f);
+        //yAxis.setAxisMaximum(100f);
+        //NEW STUFF
+        float maxYAxis = 10f;
+        for(float heiComponent : HEIScore){
+            if(heiComponent > maxYAxis){
+                maxYAxis = heiComponent;
+            }
+        }
+        //NEW STUFF
         yAxis.setDrawLabels(false);
 
         Legend l = HEIChart.getLegend();

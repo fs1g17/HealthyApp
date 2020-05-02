@@ -31,6 +31,7 @@ public class ServerRepository {
         myAPI = retrofit.create(MyAPI.class);
     }
 
+
     public MutableLiveData<HEIScore> getTESTHEIScore(){
         MutableLiveData<HEIScore> TEST = new MutableLiveData<>();
         myAPI.getTESTScore().enqueue(new Callback<HEIScore>() {
@@ -49,9 +50,9 @@ public class ServerRepository {
         return TEST;
     }
 
-    public LiveData<String> getTESTString(){
+    public LiveData<String> getTESTString(String date){
         MutableLiveData<String> TEST = new MutableLiveData<>();
-        myAPI.getTESTString().enqueue(new Callback<String>() {
+        myAPI.getTESTString(9898,date).enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 if(response.isSuccessful()){
@@ -62,6 +63,60 @@ public class ServerRepository {
             @Override
             public void onFailure(Call<String> call, Throwable t) {
                 TEST.setValue(null);
+            }
+        });
+        return TEST;
+    }
+
+    public LiveData<String> getHEIString(int userID, String date){
+        MutableLiveData<String> TEST = new MutableLiveData<>();
+        myAPI.getHEIString(userID,date).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if(response.isSuccessful()){
+                    TEST.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                TEST.setValue(null);
+            }
+        });
+        return TEST;
+    }
+
+    public LiveData<String> upload(DayOfEating doe){
+        MutableLiveData<String> TEST = new MutableLiveData<>();
+        myAPI.upload(doe).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if(response.isSuccessful()){
+                    TEST.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                TEST.setValue("poopy");
+            }
+        });
+        return TEST;
+    }
+
+    public LiveData<String> upload(int userID, String date, String foodList){
+        MutableLiveData<String> TEST = new MutableLiveData<>();
+        myAPI.upload(userID,date,foodList).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if(response.isSuccessful()){
+                    TEST.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                TEST.setValue("poopy - upload failed");
             }
         });
         return TEST;

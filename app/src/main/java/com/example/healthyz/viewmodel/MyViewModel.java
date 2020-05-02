@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.healthyz.database.HEIRecord;
 import com.example.healthyz.database.Meal;
 import com.example.healthyz.database.MealRepository;
+import com.example.healthyz.server.DayOfEating;
 import com.example.healthyz.server.HEIScore;
 import com.example.healthyz.server.ServerRepository;
 import com.example.healthyz.view.FoodFragment;
@@ -75,7 +76,7 @@ public class MyViewModel extends AndroidViewModel {
         //FOR NOW ITS HARD CODED
 
         localHEI = repository.getHEIStringByDate(currentDate);
-        remoteHEI = repository.getTESTString();
+        remoteHEI = repository.getTESTString(currentDate);
 
     }
 
@@ -137,6 +138,20 @@ public class MyViewModel extends AndroidViewModel {
         table = new HashMap<>();
 
         mealsByDate = repository.getMealsByDate(currentDate);
+        localHEI = repository.getHEIStringByDate(currentDate);
+        remoteHEI = repository.getTESTString(currentDate);
+    }
+
+    public LiveData<String> getHEIStringFromServer(int userID, String uglyDate){
+        return repository.getHEIStringFromServer(userID,uglyDate);
+    }
+
+    public LiveData<String> upload(DayOfEating doe){
+        return repository.upload(doe);
+    }
+
+    public LiveData<String> upload(int userID, String date, String foodList){
+        return repository.upload(userID,date,foodList);
     }
 
     public int[] getDayMonthYear(){
@@ -146,6 +161,7 @@ public class MyViewModel extends AndroidViewModel {
     public String getPrettyDate(){
         return day + "/" + (month+1) + "/" + year;
     }
+    public String getUglyDate() { return currentDate; }
 
     public void save(){
         repository.saveMeals(table,currentDate);
