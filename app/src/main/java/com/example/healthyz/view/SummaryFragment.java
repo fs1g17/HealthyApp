@@ -40,6 +40,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class SummaryFragment extends Fragment implements View.OnClickListener {
     private TextView TMP;
@@ -110,6 +112,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
         liveDataMerger.observe(getViewLifecycleOwner(),getNewObserver());
          */
 
+        /*
         myViewModel.getAllMeals().observe(getViewLifecycleOwner(), new Observer<List<Meal>>() {
             @Override
             public void onChanged(List<Meal> meals) {
@@ -128,8 +131,103 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
                 }
             }
         });
+         */
+
+        TMP.setText("loading from local memory");
+        myViewModel.getLocalHEI().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                if(HEIScore == null){
+                    if(s==null){
+                        TMP.setText("HEI score not saved locally \n contacting server");
+                        LOAD();
+                    } else {
+                        try{
+                            JSONObject heiJSON = new JSONObject(s);
+                            float[] TEST = new float[14];
+                            //TODO: get all the components
+                            TEST[0] = (float)heiJSON.getDouble(F_TOTAL);
+                            TEST[1] = (float)heiJSON.getDouble(F_WHOLE);
+                            TEST[2] = (float)heiJSON.getDouble(V_TOTAL);
+                            TEST[3] = (float)heiJSON.getDouble(V_GREEN);
+                            TEST[4] = (float)heiJSON.getDouble(G_WHOLE);
+                            TEST[5] = (float)heiJSON.getDouble(G_REFINED);
+                            TEST[6] = (float)heiJSON.getDouble(PF_TOTAL);
+                            TEST[7] = (float)heiJSON.getDouble(PF_SEA_PLANT);
+                            TEST[8] = (float)heiJSON.getDouble(D_TOTAL);
+                            TEST[9] = (float)heiJSON.getDouble(FA);
+                            TEST[10] = (float)heiJSON.getDouble(SAT_FATS);
+                            TEST[11] = (float)heiJSON.getDouble(NA_EST);
+                            TEST[12] = (float)heiJSON.getDouble(ADD_SUGARS);
+                            TEST[13] = (float)heiJSON.getDouble(NA_ACT);
+                            HEIScore = TEST;
+                            TMP.setText("loaded from local memory");
+                            initialise();
+                        } catch (JSONException e){
+                            TMP.setText("HEI score not saved locally \n contacting server");
+                            LOAD();
+                        }
+                    }
+                }
+            }
+        });
+
     }
 
+    private void LOAD(){
+        myViewModel.getAllMeals().observe(getViewLifecycleOwner(), new Observer<List<Meal>>() {
+            @Override
+            public void onChanged(List<Meal> meals) {
+                if(!meals.isEmpty()){
+                    try{
+                        JSONArray mealList = new JSONArray();
+                        for(Meal meal : meals){
+                            JSONObject jo = new JSONObject();
+                            JSONArray foodList = new JSONArray(meal.getMeal());
+                            jo.put("meal_id",meal.getMealID());
+                            jo.put("food_list",foodList);
+                            mealList.put(jo);
+                        }
+                        myViewModel.upload(9898,myViewModel.getUglyDate(),mealList.toString()).observe(getViewLifecycleOwner(), getNewObserver());
+                    } catch (JSONException e){
+
+                    }
+                }
+            }
+        });
+    }
+
+    private Observer<String> getNewObserver(){
+        return s -> {
+            try{
+                JSONObject heiJSON = new JSONObject(s);
+                myViewModel.saveHEIScore(heiJSON.toString());
+                float[] TEST = new float[14];
+                //TODO: get all the components
+                TEST[0] = (float)heiJSON.getDouble(F_TOTAL);
+                TEST[1] = (float)heiJSON.getDouble(F_WHOLE);
+                TEST[2] = (float)heiJSON.getDouble(V_TOTAL);
+                TEST[3] = (float)heiJSON.getDouble(V_GREEN);
+                TEST[4] = (float)heiJSON.getDouble(G_WHOLE);
+                TEST[5] = (float)heiJSON.getDouble(G_REFINED);
+                TEST[6] = (float)heiJSON.getDouble(PF_TOTAL);
+                TEST[7] = (float)heiJSON.getDouble(PF_SEA_PLANT);
+                TEST[8] = (float)heiJSON.getDouble(D_TOTAL);
+                TEST[9] = (float)heiJSON.getDouble(FA);
+                TEST[10] = (float)heiJSON.getDouble(SAT_FATS);
+                TEST[11] = (float)heiJSON.getDouble(NA_EST);
+                TEST[12] = (float)heiJSON.getDouble(ADD_SUGARS);
+                TEST[13] = (float)heiJSON.getDouble(NA_ACT);
+                HEIScore = TEST;
+                TMP.setText("downloaded from server");
+                initialise();
+            } catch (JSONException e){
+                TMP.setText("error loading HEI score from server \n try again later");
+            }
+        };
+    }
+
+    /* OLD
     private Observer<String> getNewObserver(){
         return s -> {
             if(HEIScore == null){
@@ -153,6 +251,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
                     TEST[12] = (float)heiJSON.getDouble(ADD_SUGARS);
                     TEST[13] = (float)heiJSON.getDouble(NA_ACT);
                     HEIScore = TEST;
+                    TMP.setText("downloaded from server");
                     initialise();
                 } catch (JSONException e){
                     //HEIScore = new float[]{10,10,10,10,10,10,10,10,10,10,10,10,10,10};
@@ -203,6 +302,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
             }
         };
     }
+     */
 
     private void initialise(){
         MarkerView mv = new RadarMarkerView(getContext(), R.layout.marker_view_layout);
