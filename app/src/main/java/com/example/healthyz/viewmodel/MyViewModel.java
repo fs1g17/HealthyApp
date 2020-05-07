@@ -163,7 +163,9 @@ public class MyViewModel extends AndroidViewModel {
     }
     public String getUglyDate() { return currentDate; }
 
+    //DELETING HEI RECORD BEFORE SAVING
     public void save(){
+        repository.deleteHEIRecordByDate(currentDate);
         repository.saveMeals(table,currentDate);
     }
 
