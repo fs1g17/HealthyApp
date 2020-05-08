@@ -44,6 +44,10 @@ dependencies {
     def coreTestingVersion = '2.1.0'
     def materialVersion = '1.0.0'
 
+    //recyclerview
+    implementation "androidx.recyclerview:recyclerview:1.1.0"
+    implementation "androidx.recyclerview:recyclerview-selection:1.1.0-rc01"
+
     // Required -- JUnit 4 framework
     testImplementation 'junit:junit:4.12'
     // Optional -- Robolectric environment

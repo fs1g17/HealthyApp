@@ -18,10 +18,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class MyViewModel extends AndroidViewModel {
     private int currentUserID;
@@ -41,6 +44,8 @@ public class MyViewModel extends AndroidViewModel {
     //TODO: this is a test
     private LiveData<String> localHEI;
     private LiveData<String> remoteHEI;
+
+    private ExecutorService es;
 
     public MyViewModel (Application application) {
         super(application);
@@ -78,6 +83,8 @@ public class MyViewModel extends AndroidViewModel {
         localHEI = repository.getHEIStringByDate(currentDate);
         remoteHEI = repository.getTESTString(currentDate);
 
+        int NUMBER_OF_THREADS = 4;
+        es = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
     }
 
     public void saveHEIScore(String retrievedScore){repository.insert(new HEIRecord(currentDate,retrievedScore));}
@@ -108,6 +115,17 @@ public class MyViewModel extends AndroidViewModel {
 
     public LiveData<HEIScore> getTESTScore(){
         return TEST;
+    }
+
+    public LiveData<List<String>> getSuggestions() {
+        MutableLiveData<List<String>> mutableLiveData = new MutableLiveData<>();
+        List<String> suggestions = new ArrayList<>();
+        suggestions.add("bread");
+        suggestions.add("apple");
+        suggestions.add("pear");
+        suggestions.add("curry");
+        mutableLiveData.setValue(suggestions);
+        return mutableLiveData;
     }
 
     //added synchronized keyword

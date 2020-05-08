@@ -11,6 +11,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,6 +53,10 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
     private boolean tableHidden;
     private RadarChart HEIChart;
     private MyViewModel myViewModel;
+    private RecyclerView suggestions;
+    private RecyclerView.Adapter adapter;
+    private ArrayList<SuggestionItem> suggestionItemList;
+    private RecyclerView.LayoutManager layoutManager;
 
     private static final String F_TOTAL = "total_fruits";
     private static final String F_WHOLE = "whole_fruits";
@@ -83,6 +89,13 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
         tableHidden = true;
         TMP = thisView.findViewById(R.id.TMP);
         HEIScore = null;
+        suggestions = thisView.findViewById(R.id.suggestion_container);
+        suggestions.setHasFixedSize(true);
+        suggestionItemList = new ArrayList<>();
+        layoutManager = new LinearLayoutManager(getContext());
+        adapter = new SuggestionAdapter(suggestionItemList);
+        suggestions.setLayoutManager(layoutManager);
+        suggestions.setAdapter(adapter);
         return thisView;
     }
 
@@ -133,13 +146,24 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
         });
          */
 
-        TMP.setText("loading from local memory");
+        myViewModel.getSuggestions().observe(getViewLifecycleOwner(), new Observer<List<String>>() {
+            @Override
+            public void onChanged(List<String> strings) {
+                for(String s : strings){
+                    SuggestionItem suggestionItem = new SuggestionItem(s);
+                    suggestionItemList.add(suggestionItem);
+                }
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+        //TMP.setText("loading from local memory");
         myViewModel.getLocalHEI().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String s) {
                 if(HEIScore == null){
                     if(s==null){
-                        TMP.setText("HEI score not saved locally \n contacting server");
+                        //TMP.setText("HEI score not saved locally \n contacting server");
                         LOAD();
                     } else {
                         try{
@@ -161,10 +185,10 @@ public class SummaryFragment extends Fragment implements View.OnClickListener {
                             TEST[12] = (float)heiJSON.getDouble(ADD_SUGARS);
                             TEST[13] = (float)heiJSON.getDouble(NA_ACT);
                             HEIScore = TEST;
-                            TMP.setText("loaded from local memory");
+                            //TMP.setText("loaded from local memory");
                             initialise();
                         } catch (JSONException e){
-                            TMP.setText("HEI score not saved locally \n contacting server");
+                            //TMP.setText("HEI score not saved locally \n contacting server");
                             LOAD();
                         }
                     }
