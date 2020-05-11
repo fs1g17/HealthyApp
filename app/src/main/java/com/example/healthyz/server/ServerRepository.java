@@ -50,6 +50,24 @@ public class ServerRepository {
         return TEST;
     }
 
+    public LiveData<String> getRecommendations(String date){
+        MutableLiveData<String> recommendations = new MutableLiveData<>();
+        myAPI.getRecommendations(9898,date).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if(response.isSuccessful()){
+                    recommendations.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                recommendations.setValue(null);
+            }
+        });
+        return recommendations;
+    }
+
     public LiveData<String> getTESTString(String date){
         MutableLiveData<String> TEST = new MutableLiveData<>();
         myAPI.getTESTString(9898,date).enqueue(new Callback<String>() {

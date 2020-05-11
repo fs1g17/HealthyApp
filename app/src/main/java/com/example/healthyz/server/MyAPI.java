@@ -47,6 +47,9 @@ public interface MyAPI {
             @Field("date") String date,
             @Field("foodList") String foodList
     );
+
+    @GET("recommend")
+    Call<String> getRecommendations(@Query("userID") int userID, @Query("date") String date);
 }
 
 class UserID {

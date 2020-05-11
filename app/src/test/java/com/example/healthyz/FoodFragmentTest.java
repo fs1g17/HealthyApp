@@ -5,6 +5,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import androidx.test.core.app.ApplicationProvider;
+
+import com.example.healthyz.view.FoodDiaryFragment;
 import com.example.healthyz.view.FoodFragment;
 import com.example.healthyz.view.MealFragment;
 
@@ -42,6 +44,10 @@ public class FoodFragmentTest {
      */
 
     public void checkPlusButton()throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchFieldException{
+        FoodDiaryFragment fdf = new FoodDiaryFragment();
+        Class<?> fdfClass = fdf.getClass();
 
+        Field addButton = fdfClass.getDeclaredField("addEntry");
+        addButton.setAccessible(true);
     }
 }

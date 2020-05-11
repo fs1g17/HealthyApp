@@ -73,4 +73,7 @@ public class Repository {
 
     public LiveData<String> upload(int userID, String date, String foodList){ return sRepository.upload(userID,date,foodList); }
     public LiveData<String> getHEIStringFromServer(int userID, String uglyDate){return sRepository.getHEIString(userID,uglyDate);}
+
+    //Recommendations
+    public LiveData<String> getRecommendations(String date){return sRepository.getRecommendations(date);}
 }
