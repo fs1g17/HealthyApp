@@ -1,6 +1,6 @@
 # View in Android 
 
-The main entry point for an Android application is an [Activity](https://developer.android.com/reference/android/app/Activity). The Activity can be splpit up into related elements that can be grouped into [Fragments](https://developer.android.com/guide/fragments). Fragments can be nested in Activities. Here there are 2 main Fragments that are contained in the Main Activity, the Food Diary Fragment, and the Summary Fragment. The user can navigate between them using the navigation drawer by swiping from the left of the screen, as shown in the images below (left is a screenshot, and right is the [Navigation Graph](https://developer.android.com/guide/navigation/navigation-getting-started))
+The main entry point for an Android application is an [Activity](https://developer.android.com/reference/android/app/Activity). The Activity can be split up into related elements that can be grouped into [Fragments](https://developer.android.com/guide/fragments). Fragments can be nested in Activities. Here there are 2 main Fragments that are contained in the Main Activity, the Food Diary Fragment, and the Summary Fragment. The user can navigate between them using the navigation drawer by swiping from the left of the screen, as shown in the images below (left is a screenshot, and right is the [Navigation Graph](https://developer.android.com/guide/navigation/navigation-getting-started))
 
 <img src="/images/navigation_drawer.jpg" width=28.9%> <img src="/images/nav_graph.png" width=70.3%>
 
