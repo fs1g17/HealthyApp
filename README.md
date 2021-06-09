@@ -27,7 +27,9 @@ The application analyses the user input to produce an estimate of the user's HEI
 <img src="/images/hei_table_visible.jpg" height=500> <img src="/images/my_input_recommendations.jpg" height=500>
 
 # Implementation
-A brief overview of the inner workings of the application can be found [here](/app/src/main/java/com/example/healthyz/).
+A brief overview of the inner workings of the Android application can be found [here](/app/src/main/java/com/example/healthyz/).
+
+The backend is a separate project that can be found [here](https://github.com/fs1g17/HealthyAppBackend).
 
 # Report 
 A detailed report discussing the project and the development process can be found [here](/images/Report_fs1g17.pdf). 
