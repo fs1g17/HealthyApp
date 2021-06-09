@@ -3,7 +3,7 @@
 
 # About
 
-HealthyZ is an Android cloud app that uses collaborative filtering to suggest food items that will maximise the user’s Healthy Eating Index (HEI). 
+HealthyZ is an Android cloud app that uses collaborative filtering to suggest food items that will maximise the user’s [Healthy Eating Index](https://www.fns.usda.gov/healthy-eating-index-hei) (HEI). 
 
 
 # How it Works
@@ -12,7 +12,7 @@ Many industries have seen great success with recommender systems. Netflix sugges
 
 The premise is simple, people are more likely to stick to a diet that is more enjoyable. The burden of forcing down chicken that is drier than the Sahara desert and broccoli that tastes like TV static becomes increasingly difficult with the ever-growing temptation of indulgence in sugary sweets and savoury snacks. 
 
-It is difficult to define what makes a diet healthy, so in this project I reference HEI, which is the degree to which a diet complies with the Dietary Guidelines for Americans (DGA). HEI is measured across 13 different components, and an overall score is indicative of the quality of the diet. It is important to note that HEI assesses the quality of the diet, not considering the quantity of food consumed (there are many calorie tracking apps available). 
+It is difficult to define what makes a diet healthy, so in this project I reference HEI, which is the degree to which a diet complies with the [Dietary Guidelines for Americans](https://www.dietaryguidelines.gov/) (DGA). HEI is measured across 13 different components, and an overall score is indicative of the quality of the diet. It is important to note that HEI assesses the quality of the diet, not considering the quantity of food consumed (there are many calorie tracking apps available). 
 
 
 ## Food Diary 
