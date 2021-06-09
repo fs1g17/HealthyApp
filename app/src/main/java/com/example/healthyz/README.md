@@ -9,3 +9,9 @@ The Model contains parts that are stored locally (see [here](database)), as well
 The ViewModel (see [here](viewmodel)) contains classes that prepare the data for the View. 
 
 The View (see [here](view)) contains Android classes (namely Activities and Fragments) that display the data.
+
+# Collaborative Filtering Overview
+
+Below is a flow diagram showing the collaborative filtering steps. I ran the backend of this project locally on my PC. 
+
+<img src="/images/collaborative_filtering.png" height=700>
